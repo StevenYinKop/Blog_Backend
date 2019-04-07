@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.cincommon.mapper.TagMapper">
+	<resultMap id="forumMap" type="xyz.cincommon.model.ForumInfo">
+		<id property="forumId" column="forum_id" />
+		<result property="forumName" column="forum_name" />
+		<result property="forumPicUrl" column="forum_pic_url" />
+		<result property="blogCount" column="blog_count" />		
+		<result property="createDate" column="create_date" />
+		<result property="createUser" column="create_user" />
+		<result property="updateDate" column="update_date" />
+		<result property="updateUser" column="update_user" />
+		<collection property="blogInfoSet"
+			ofType="xyz.cincommon.model.BlogInfo">
+			<result property="id" column="id" />
+			<result property="uid" column="uid" />
+			<result property="title" column="title" />
+			<result property="content" column="content" />
+			<result property="clickRates" column="click_rates" />
+			<result property="replyAmount" column="reply_amount" />
+			<result property="createDate" column="create_date" />
+			<result property="createUser" column="create_user" />
+			<result property="updateDate" column="update_date" />
+			<result property="updateUser" column="update_user" />
+		</collection>
+	</resultMap>
+	<select id="findAllForumInfo" resultMap="tagMap">
+		SELECT
+		f.*, count(bi.id) AS blog_count
+		FROM
+		forum_info f
+		LEFT JOIN blog_forum bf ON f.forum_id =bf.forum_id
+		LEFT JOIN blog_info bi ON bi.id = bf.blog_id
+		GROUP BY
+		f.forum_id
+	</select>
+	<select id="findForumById" resultMap="tagMap">
+	</select>
+</mapper>

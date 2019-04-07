@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.cincommon.mapper.TagMapper">
+	<resultMap id="tagMap" type="xyz.cincommon.model.TagInfo">
+		<id property="tagId" column="tag_id" />
+		<result property="tagName" column="tag_name" />
+		<result property="createDate" column="create_date" />
+		<result property="createUser" column="create_user" />
+		<result property="updateDate" column="update_date" />
+		<result property="updateUser" column="update_user" />
+		<collection property="blogInfoSet"
+			ofType="xyz.cincommon.model.BlogInfo">
+			<result property="id" column="id" />
+			<result property="uid" column="uid" />
+			<result property="title" column="title" />
+			<result property="content" column="content" />
+			<result property="introduction" column="introduction" />
+			<result property="clickRates" column="click_rates" />
+			<result property="replyAmount" column="reply_amount" />
+			<result property="createDate" column="create_date2" />
+			<result property="createUser" column="create_user2" />
+			<result property="updateDate" column="update_date2" />
+			<result property="updateUser" column="update_user2" />
+			<collection property="tagInfoSet"
+				ofType="xyz.cincommon.model.TagInfo">
+				<id property="tagId" column="tag_id2" />
+				<result property="tagName" column="tag_name2" />
+			</collection>
+		</collection>
+	</resultMap>
+	<select id="findAllTagInfo" resultMap="tagMap">
+		SELECT
+		t.*, bi.*
+		FROM
+		tag_info t
+		LEFT JOIN blog_tag bt ON t.tag_id = bt.tag_id
+		LEFT JOIN
+		blog_info bi ON bi.id = bt.blog_id
+	</select>
+	<select id="findTagById" resultMap="tagMap">
+		SELECT
+		b.tag_id,
+		b.tag_name,
+		b.create_date,
+		b.create_user,
+		b.create_date,
+		b.create_user,
+		a.id,
+		a.uid,
+		a.title,
+		a.content,
+		a.introduction,
+		a.click_rates,
+		a.reply_amount,
+		a.create_date AS create_date2,
+		a.create_user AS create_user2,
+		a.update_date AS update_date2,
+		a.update_user AS update_user2,
+		b2.tag_id AS tag_id2,
+		b2.tag_name AS tag_name2
+		FROM
+		blog_info AS a
+		LEFT JOIN blog_tag AS bi ON a.id = bi.blog_id
+		RIGHT JOIN tag_info AS b ON b.tag_id = bi.tag_id
+		LEFT JOIN blog_tag AS bt2 ON a.id = bt2.blog_id
+		LEFT JOIN tag_info AS b2 ON bt2.tag_id = b2.tag_id
+		WHERE
+		b.tag_id = #{id}
+	</select>
+</mapper>
