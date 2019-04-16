@@ -12,7 +12,7 @@ public interface BlogMapper {
 
 	public List<BlogInfo> findTop10BlogInfo();
 	
-	public BlogInfo findById(String id);
+	public List<BlogInfo> findById(@Param("id")String id);
 	
 	public Integer updateBlog(BlogInfo blogInfo);
 	

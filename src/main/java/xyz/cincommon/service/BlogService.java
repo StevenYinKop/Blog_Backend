@@ -10,7 +10,7 @@ import xyz.cincommon.vo.ReturnResult;
 public interface BlogService {
 	ReturnResult<List<BlogInfo>> initMain() throws Exception;
 	
-	ReturnResult<BlogInfo> findBlogById(String id);
+	ReturnResult<Map<String, Object>> findBlogById(String id);
 
 	ReturnResult<Map<String, List<BlogInfo>>> findBlog(String uid, Date startDate, Date endDate);
 

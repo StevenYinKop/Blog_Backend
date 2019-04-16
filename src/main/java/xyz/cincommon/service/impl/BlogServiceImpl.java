@@ -29,15 +29,30 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
-	public ReturnResult<BlogInfo> findBlogById(String id) {
-		BlogInfo blogInfo = blogMapper.findById(id);
-		if (blogInfo != null) {
-			blogInfo.setClickRates(blogInfo.getClickRates() + 1);
-			blogMapper.updateBlog(blogInfo);			
+	public ReturnResult<Map<String, Object>> findBlogById(String id) {
+		List<BlogInfo> blogInfoList = blogMapper.findById(id);
+		BlogInfo currentBlog = null, prevBlog = null, postBlog = null;
+		Integer currentId = Integer.valueOf(id);
+		for (BlogInfo blogInfo : blogInfoList) {
+			if (blogInfo.getId() == currentId) {
+				currentBlog = blogInfo;
+			} else if (blogInfo.getId() > currentId) {
+				postBlog = blogInfo;
+			} else if (blogInfo.getId() < currentId) {
+				prevBlog = blogInfo;
+			}
+		}
+		if (currentBlog != null) {
+			currentBlog.setClickRates(currentBlog.getClickRates() + 1);
+			blogMapper.updateBlog(currentBlog);			
 		} else {
 			return ReturnResult.error(CodeMsg.NOT_FIND_DATA);
 		}
-		return ReturnResult.success(blogInfo);
+		Map<String, Object> result = new HashMap<>();
+		result.put("currentBlog", currentBlog);
+		result.put("prevBlog", prevBlog);
+		result.put("postBlog", postBlog);
+		return ReturnResult.success(result);
 	}
 
 	@Override

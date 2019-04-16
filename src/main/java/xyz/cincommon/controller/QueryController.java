@@ -33,7 +33,7 @@ public class QueryController {
 	private ForumService forumService;
 
 	@GetMapping("/blog/{id}")
-	public ReturnResult<BlogInfo> getBlog(@PathVariable("id") String id) {
+	public ReturnResult<Map<String, Object>> getBlog(@PathVariable("id") String id) {
 		return blogService.findBlogById(id);
 	}
 

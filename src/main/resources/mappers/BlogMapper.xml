@@ -33,9 +33,16 @@
 		ORDER BY res.create_date DESC
 	</select>
 	<select id="findById" resultMap="blogMap">
-		SELECT a.*, b.tag_id, b.tag_name
-		FROM blog_info as a LEFT JOIN blog_tag as bi ON a.id = bi.blog_id LEFT
-		JOIN tag_info as b ON b.tag_id = bi.tag_id WHERE a.id=#{id}
+		SELECT bi.*, ti.tag_id AS tag_id,
+		ti.tag_name AS tag_name FROM blog_info bi
+		LEFT JOIN blog_tag bt ON
+		bt.blog_id=bi.id
+		LEFT JOIN tag_info ti ON bt.tag_id= ti.tag_id
+		WHERE
+		bi.id=(SELECT id FROM blog_info WHERE id &gt; #{id} LIMIT 0, 1) OR
+		bi.id=(SELECT id FROM blog_info WHERE id &lt; #{id} ORDER BY id DESC
+		LIMIT 0, 1) OR
+		bi.id=(SELECT id FROM blog_info WHERE id = #{id});
 	</select>
 	<select id="findBlog" resultMap="blogMap">
 		SELECT a.*, b.tag_id, b.tag_name
