@@ -10,6 +10,7 @@
 		<result property="status" column="status" />
 		<result property="clickRates" column="click_rates" />
 		<result property="replyAmount" column="reply_amount" />
+		<result property="createUser" column="create_user" />
 		<result property="createDate" column="create_date" />
 		<result property="updateDate" column="update_date" />
 		<result property="updateUser" column="update_user" />
