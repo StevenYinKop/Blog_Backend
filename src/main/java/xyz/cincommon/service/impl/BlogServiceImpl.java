@@ -8,11 +8,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import xyz.cincommon.exception.BlogException;
 import xyz.cincommon.mapper.BlogMapper;
 import xyz.cincommon.model.BlogInfo;
+import xyz.cincommon.model.User;
 import xyz.cincommon.service.BlogService;
 import xyz.cincommon.vo.CodeMsg;
 import xyz.cincommon.vo.ReturnResult;
@@ -23,14 +31,15 @@ public class BlogServiceImpl implements BlogService {
 	private BlogMapper blogMapper;
 
 	@Override
-	public ReturnResult<List<BlogInfo>> initMain() throws IllegalAccessException, InvocationTargetException {
-		List<BlogInfo> blogList = blogMapper.findTop10BlogInfo();
-		return ReturnResult.success(blogList);
+	public ReturnResult<PageInfo<BlogInfo>> initMain(int pageSize, int pageNum) throws IllegalAccessException, InvocationTargetException {
+		PageHelper.startPage(pageNum, pageSize);
+		PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogMapper.findTop10BlogInfo(pageSize * pageNum, pageNum));
+		return ReturnResult.success(pageInfo);
 	}
 
 	@Override
 	public ReturnResult<Map<String, Object>> findBlogById(String id) {
-		List<BlogInfo> blogInfoList = blogMapper.findById(id);
+		List<BlogInfo> blogInfoList = blogMapper.findByIdWithPrePost(id);
 		BlogInfo currentBlog = null, prevBlog = null, postBlog = null;
 		Integer currentId = Integer.valueOf(id);
 		for (BlogInfo blogInfo : blogInfoList) {
@@ -44,7 +53,7 @@ public class BlogServiceImpl implements BlogService {
 		}
 		if (currentBlog != null) {
 			currentBlog.setClickRates(currentBlog.getClickRates() + 1);
-			blogMapper.updateBlog(currentBlog);			
+			blogMapper.updateBlog(currentBlog);
 		} else {
 			return ReturnResult.error(CodeMsg.NOT_FIND_DATA);
 		}
@@ -88,5 +97,53 @@ public class BlogServiceImpl implements BlogService {
 			result.put(month, count);
 		}
 		return ReturnResult.success(result);
+	}
+
+	@Override
+	public ReturnResult<Map<String, Object>> getBlogList(String keyword, String tagIdList, String forumId, int pageSize,
+			int pageNum) {
+		Map<String, Object> map = new HashMap<>();
+		String[] tagIdArray = StringUtils.splitByWholeSeparator(tagIdList, ",");
+		PageHelper.startPage(pageNum, pageSize);
+		PageInfo<BlogInfo> pageInfo = new PageInfo<>(
+				blogMapper.findBlogByKeywordTagForum(keyword, tagIdArray, forumId));
+		map.put("pageInfo", pageInfo);
+		return ReturnResult.success(map);
+	}
+
+	@Override
+	public ReturnResult<Map<String, Object>> saveBlogInfo(String blogId, String title, String content,
+			String introduction) throws BlogException {
+		User principal = (User) SecurityUtils.getSubject().getPrincipal();
+		Integer uid = principal.getUid();
+		BlogInfo blogInfo;
+		if (StringUtils.isEmpty(blogId)) {
+			blogInfo = blogMapper.findById(blogId);
+			if (ObjectUtils.isEmpty(blogInfo)) {
+				throw new BlogException(CodeMsg.NOT_FIND_BLOG);
+			}
+			blogInfo.setContent(content);
+			blogInfo.setIntroduction(introduction);
+			blogInfo.setTitle(title);
+			blogInfo.setUpdateUser(uid.toString());
+			blogInfo.setUpdateDate(new Date());
+			blogMapper.updateBlog(blogInfo);
+		} else {
+			blogInfo = new BlogInfo();
+			blogInfo.setUid(uid);
+			blogInfo.setContent(content);
+			blogInfo.setIntroduction(introduction);
+			blogInfo.setTitle(title);
+			blogInfo.setReplyAmount(0);
+			blogInfo.setClickRates(0);
+			blogInfo.setCreateUser(uid.toString());
+			blogInfo.setCreateDate(new Date());
+			blogInfo.setUpdateUser(uid.toString());
+			blogInfo.setUpdateDate(new Date());
+			blogMapper.insertBlog(blogInfo);
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("blogInfo", blogInfo);
+		return ReturnResult.success(map);
 	}
 }

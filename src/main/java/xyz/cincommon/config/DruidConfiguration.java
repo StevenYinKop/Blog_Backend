@@ -1,4 +1,6 @@
 package xyz.cincommon.config;
+import javax.servlet.Filter;
+import javax.servlet.Servlet;
 import javax.sql.DataSource;
 
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -21,8 +23,8 @@ import com.alibaba.druid.support.http.WebStatFilter;
 public class DruidConfiguration {
 
     @Bean
-    public ServletRegistrationBean statViewServlet() {
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
+    public ServletRegistrationBean<Servlet> statViewServlet() {
+        ServletRegistrationBean<Servlet> servletRegistrationBean = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
         //白名单：
         servletRegistrationBean.addInitParameter("allow", "127.0.0.1");
         //IP黑名单 (存在共同时，deny优先于allow) : 如果满足deny的即提示:Sorry, you are not permitted to view this page.
@@ -36,8 +38,8 @@ public class DruidConfiguration {
     }
 
     @Bean
-    public FilterRegistrationBean statFilter() {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(new WebStatFilter());
+    public FilterRegistrationBean<Filter> statFilter() {
+        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>(new WebStatFilter());
         //添加过滤规则.
         filterRegistrationBean.addUrlPatterns("/*");
         //添加不需要忽略的格式信息.

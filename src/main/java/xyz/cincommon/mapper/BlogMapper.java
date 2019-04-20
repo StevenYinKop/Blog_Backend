@@ -10,13 +10,22 @@ import xyz.cincommon.model.BlogInfo;
 
 public interface BlogMapper {
 
-	public List<BlogInfo> findTop10BlogInfo();
-	
-	public List<BlogInfo> findById(@Param("id")String id);
-	
+	public List<BlogInfo> findTop10BlogInfo(@Param("start")int start, @Param("offset")int offset);
+
+	public List<BlogInfo> findByIdWithPrePost(@Param("id") String id);
+
+	public BlogInfo findById(String id);
+
 	public Integer updateBlog(BlogInfo blogInfo);
-	
-	public List<BlogInfo> findBlog(@Param("startDate")Date startDate, @Param("endDate")Date endDate, @Param("uid")String uid);
+
+	public List<BlogInfo> findBlog(@Param("startDate") Date startDate, @Param("endDate") Date endDate,
+			@Param("uid") String uid);
 
 	public List<Map<String, Object>> findOneYearBlogCount(@Param("year") int year);
+
+	public List<BlogInfo> findBlogByKeywordTagForum(@Param("keyword") String keyword,
+			@Param("tagIdArray") String[] tagIdArray, @Param("forumId") String forumId);
+
+	public void insertBlog(BlogInfo blogInfo);
+
 }

@@ -4,11 +4,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.github.pagehelper.PageInfo;
+
+import xyz.cincommon.exception.BlogException;
 import xyz.cincommon.model.BlogInfo;
 import xyz.cincommon.vo.ReturnResult;
 
 public interface BlogService {
-	ReturnResult<List<BlogInfo>> initMain() throws Exception;
+	ReturnResult<PageInfo<BlogInfo>> initMain(int pageSize, int pageNum) throws Exception;
 	
 	ReturnResult<Map<String, Object>> findBlogById(String id);
 
@@ -17,4 +20,9 @@ public interface BlogService {
 	ReturnResult<List<BlogInfo>> getOneDayBlog(Date date);
 
 	ReturnResult<Map<String, Long>> getOneYearCount(Integer year);
+
+	ReturnResult<Map<String, Object>> getBlogList(String keyword, String tagIdList, String forumId, int pageSize, int pageNum);
+
+	ReturnResult<Map<String, Object>> saveBlogInfo(String blogId, String title, String content,
+			String introduction) throws BlogException;
 }

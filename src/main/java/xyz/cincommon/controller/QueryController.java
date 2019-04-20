@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.druid.util.StringUtils;
+import com.github.pagehelper.PageInfo;
 
 import xyz.cincommon.model.BlogInfo;
 import xyz.cincommon.model.ForumInfo;
@@ -37,9 +38,12 @@ public class QueryController {
 		return blogService.findBlogById(id);
 	}
 
-	@RequestMapping("/initMain")
-	public ReturnResult<List<BlogInfo>> initMain() throws Exception {
-		return blogService.initMain();
+	@GetMapping("/initMain")
+	public ReturnResult<PageInfo<BlogInfo>> initMain(
+			@RequestParam(required = false, name = "pageSize", defaultValue="10") int pageSize,
+			@RequestParam(required = false, name = "pageNum", defaultValue="1") int pageNum
+			) throws Exception {
+		return blogService.initMain(pageSize, pageNum);
 	}
 
 	@GetMapping("/queryByDate")

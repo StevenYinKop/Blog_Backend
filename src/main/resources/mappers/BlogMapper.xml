@@ -23,27 +23,92 @@
 		</collection>
 	</resultMap>
 	<select id="findTop10BlogInfo" resultMap="blogMap">
-		SELECT res.*,
+		SELECT
+		res.id,
+		res.uid,
+		res.title,
+		res.introduction,
+		res.status,
+		res.click_rates,
+		res.reply_amount,
+		res.create_user,
+		res.create_date,
 		ti.tag_id,
-		ti.tag_name FROM (SELECT * FROM blog_info bi
-		LIMIT 0, 10) res
-		INNER JOIN blog_tag bt ON bt.blog_id =
+		ti.tag_name FROM (SELECT * FROM blog_info AS bi
+<!-- 		LIMIT #{start}, -->
+<!-- 		#{offset}) AS -->
+		) AS res
+		INNER JOIN
+		blog_tag AS bt ON bt.blog_id =
 		res.id
-		INNER JOIN tag_info ti ON
-		ti.tag_id = bt.tag_id
+		INNER
+		JOIN tag_info AS ti
+		ON
+		ti.tag_id =
+		bt.tag_id
 		ORDER BY res.create_date DESC
 	</select>
-	<select id="findById" resultMap="blogMap">
-		SELECT bi.*, ti.tag_id AS tag_id,
+	<select id="findByIdWithPrePost" resultMap="blogMap">
+		SELECT bi.*,
+		ti.tag_id AS
+		tag_id,
 		ti.tag_name AS tag_name FROM blog_info bi
-		LEFT JOIN blog_tag bt ON
+		LEFT JOIN
+		blog_tag bt
+		ON
+		bt.blog_id=bi.id
+		LEFT JOIN tag_info ti ON bt.tag_id=
+		ti.tag_id
+		WHERE
+		bi.id=(SELECT id FROM blog_info WHERE id &gt; #{id}
+		LIMIT 0, 1) OR
+		bi.id=(SELECT id FROM blog_info WHERE id &lt; #{id}
+		ORDER BY id DESC
+		LIMIT 0, 1) OR
+		bi.id=(SELECT id FROM blog_info WHERE id
+		= #{id});
+	</select>
+	<select id="findById" resultMap="blogMap">
+		SELECT bi.*, ti.tag_id AS
+		tag_id,
+		ti.tag_name AS tag_name FROM blog_info bi
+		LEFT JOIN blog_tag bt
+		ON
 		bt.blog_id=bi.id
 		LEFT JOIN tag_info ti ON bt.tag_id= ti.tag_id
 		WHERE
-		bi.id=(SELECT id FROM blog_info WHERE id &gt; #{id} LIMIT 0, 1) OR
-		bi.id=(SELECT id FROM blog_info WHERE id &lt; #{id} ORDER BY id DESC
-		LIMIT 0, 1) OR
-		bi.id=(SELECT id FROM blog_info WHERE id = #{id});
+		bi.id=#{id};
+	</select>
+	<select id="findBlogByKeywordTagForum" resultMap="blogMap">
+		SELECT
+		bi.id,
+		bi.uid,
+		bi.title,
+		bi.introduction,
+		bi.status,
+		bi.click_rates,
+		bi.reply_amount,
+		bi.create_user,
+		bi.create_date,
+		ti.tag_id,
+		ti.tag_name
+		FROM
+		blog_info bi
+		LEFT JOIN blog_tag bt ON bi.id = bt.blog_id
+		LEFT JOIN
+		tag_info ti ON ti.tag_id = bt.tag_id
+		WHERE 1=1
+		<if test="keyword != null and keyword != ''">
+			AND bi.title LIKE CONCAT('%',#{keyword},'%')
+		</if>
+		<if
+			test="tagIdArray != null and tagIdArray != '' and tagIdArray.length != 0">
+			AND ti.tag_id IN
+			<foreach collection="tagIdArray" item="id" index="index"
+				open="(" close=")" separator=",">
+				#{id}
+			</foreach>
+		</if>
 	</select>
 	<select id="findBlog" resultMap="blogMap">
 		SELECT a.*, b.tag_id, b.tag_name
@@ -80,6 +145,26 @@
 		GROUP BY
 		MONTH;
 	</select>
+	<insert id="insertBlog" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO blog_info(uid, title, content,
+		introduction, status,
+		click_rates, reply_amount, create_date,
+		create_user, update_date,
+		update_user)
+		VALUES(
+		#{uid},
+		#{title},
+		#{content},
+		#{introduction},
+		#{status},
+		#{click_rates},
+		#{reply_amount},
+		#{create_date},
+		#{create_user},
+		#{update_date},
+		#{update_user}
+		);
+	</insert>
 	<update id="updateBlog"
 		parameterType="xyz.cincommon.model.BlogInfo" flushCache="true"
 		statementType="PREPARED" timeout="20">
