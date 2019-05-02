@@ -31,10 +31,12 @@ public class BlogServiceImpl implements BlogService {
 	private BlogMapper blogMapper;
 
 	@Override
-	public ReturnResult<PageInfo<BlogInfo>> initMain(int pageSize, int pageNum) throws IllegalAccessException, InvocationTargetException {
-		PageHelper.startPage(pageNum, pageSize);
-		PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogMapper.findTop10BlogInfo(pageSize * pageNum, pageNum));
-		return ReturnResult.success(pageInfo);
+	public ReturnResult<Map<String, Object>> initMain(int pageSize, int pageNum) throws IllegalAccessException, InvocationTargetException {
+		Map<String, Object> result = new HashMap<>();
+		Integer total = blogMapper.countBlog();
+		result.put("total", total);
+		result.put("list", blogMapper.findTop10BlogInfo(pageSize * pageNum, pageSize));
+		return ReturnResult.success(result);
 	}
 
 	@Override

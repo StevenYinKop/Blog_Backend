@@ -51,4 +51,8 @@ public class EncryptedUtils {
 		}
 		return result;
 	}
+	
+	public static void main(String[] args) {
+		System.out.println(decrypt("9DqWB84slc+eh742SPz3lc/adeuXeX2pY9GmFzhM1+PGQOTdYBNBvsaYxvrTvS1ctgdm6VLOJFuVkHeQIt2aV75BBZvGVnqzLIG7snNSvB4HQyMiObfSU72ox6ji5sK3", Constant.DEFAULT_ENCRYPT_KEY));
+	}
 }

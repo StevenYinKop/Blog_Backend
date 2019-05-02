@@ -27,5 +27,7 @@ public interface BlogMapper {
 			@Param("tagIdArray") String[] tagIdArray, @Param("forumId") String forumId);
 
 	public void insertBlog(BlogInfo blogInfo);
+	
+	public Integer countBlog();
 
 }

@@ -4,14 +4,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.github.pagehelper.PageInfo;
-
 import xyz.cincommon.exception.BlogException;
 import xyz.cincommon.model.BlogInfo;
 import xyz.cincommon.vo.ReturnResult;
 
 public interface BlogService {
-	ReturnResult<PageInfo<BlogInfo>> initMain(int pageSize, int pageNum) throws Exception;
+	ReturnResult<Map<String, Object>> initMain(int pageSize, int pageNum) throws Exception;
 	
 	ReturnResult<Map<String, Object>> findBlogById(String id);
 

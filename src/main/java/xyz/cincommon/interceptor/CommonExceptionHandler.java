@@ -1,5 +1,7 @@
 package xyz.cincommon.interceptor;
 
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthenticatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,6 +22,18 @@ public class CommonExceptionHandler {
 		return ReturnResult.error(e.getCodeMsg());
 	}
 
+	@ExceptionHandler(AuthorizationException.class)
+	public ReturnResult<String> exceptionHandle(AuthorizationException e) {
+		e.printStackTrace();
+		LOGGER.error(e.getMessage());
+		return ReturnResult.error(CodeMsg.SERVER_EXCEPTION, e.getMessage());
+	}
+	@ExceptionHandler(UnauthenticatedException.class)
+	public ReturnResult<String> exceptionHandle(UnauthenticatedException e) {
+		e.printStackTrace();
+		LOGGER.error(e.getMessage());
+		return ReturnResult.error(CodeMsg.SERVER_EXCEPTION, e.getMessage());
+	}
 	@ExceptionHandler(Exception.class)
 	public ReturnResult<String> exceptionHandle(Exception e) {
 		e.printStackTrace();
