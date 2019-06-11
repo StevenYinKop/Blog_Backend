@@ -12,7 +12,7 @@ import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
+//import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 
 public class CustomAuthenticationFilter extends FormAuthenticationFilter {
 	private static final Logger log = LoggerFactory.getLogger(FormAuthenticationFilter.class);

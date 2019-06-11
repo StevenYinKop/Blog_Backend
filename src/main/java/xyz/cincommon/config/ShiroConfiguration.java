@@ -1,6 +1,7 @@
 package xyz.cincommon.config;
 
 import java.util.HashMap;
+
 import java.util.Map;
 
 import javax.servlet.Filter;
@@ -8,6 +9,7 @@ import javax.servlet.Filter;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -41,20 +43,19 @@ public class ShiroConfiguration {
 			@Qualifier("securityManager") org.apache.shiro.mgt.SecurityManager securityManager) {
 		ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
 		bean.setSecurityManager(securityManager);
-		 Map<String, Filter> filters = new HashMap<>();
-		 filters.put("authc", customAuthenticationFilter());
-		 bean.setFilters(filters);
-		 HashMap<String, String> filterChainDefinitionMap = new HashMap<>();
-		// org.apache.shiro.web.filter.mgt.DefaultFilter
-		 filterChainDefinitionMap.put("/**", "anon");
-		 filterChainDefinitionMap.put("/admin/**", "authc");
-		// filterChainDefinitionMap.put("/loginUser", "anon");
-		// filterChainDefinitionMap.put("/delete", "perms[delete]");
-		// filterChainDefinitionMap.put("/admin", "roles[admin]");
-		// filterChainDefinitionMap.put("/query", "perms[query]");
-		// filterChainDefinitionMap.put("/**", "authc");
-		// bean.set
-		 bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+//		 Map<String, Filter> filters = new HashMap<>();
+//		 filters.put("authc", customAuthenticationFilter());
+//		 bean.setFilters(filters);
+//		 HashMap<String, String> filterChainDefinitionMap = new HashMap<>();
+//		// org.apache.shiro.web.filter.mgt.DefaultFilter
+//		 filterChainDefinitionMap.put("/**", "anon");
+//		 filterChainDefinitionMap.put("/admin/**", "authc");
+//		// filterChainDefinitionMap.put("/loginUser", "anon");
+//		// filterChainDefinitionMap.put("/delete", "perms[delete]");
+//		// filterChainDefinitionMap.put("/admin", "roles[admin]");
+//		// filterChainDefinitionMap.put("/query", "perms[query]");
+//		// filterChainDefinitionMap.put("/**", "authc");
+//		 bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return bean;
 	}
 
@@ -65,7 +66,7 @@ public class ShiroConfiguration {
 
 	@Bean
 	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(
-			@Qualifier("securityManager") org.apache.shiro.mgt.SecurityManager securityManager) {
+			@Qualifier("securityManager") SecurityManager securityManager) {
 		AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
 		advisor.setSecurityManager(securityManager);
 		return advisor;

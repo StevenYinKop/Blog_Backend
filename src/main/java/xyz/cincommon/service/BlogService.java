@@ -23,4 +23,6 @@ public interface BlogService {
 
 	ReturnResult<Map<String, Object>> saveBlogInfo(String blogId, String title, String content,
 			String introduction) throws BlogException;
+
+	ReturnResult<Map<String, Object>> initBlogView();
 }

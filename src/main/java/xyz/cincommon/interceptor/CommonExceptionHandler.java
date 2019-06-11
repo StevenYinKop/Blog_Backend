@@ -19,7 +19,7 @@ public class CommonExceptionHandler {
 	public ReturnResult<String> exceptionHandle(BlogException e) {
 		e.printStackTrace();
 		LOGGER.error(e.getMessage());
-		return ReturnResult.error(e.getCodeMsg());
+		return ReturnResult.error(e.getCodeMsg(), e.getMessage());
 	}
 
 	@ExceptionHandler(AuthorizationException.class)

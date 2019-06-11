@@ -19,6 +19,8 @@ import com.github.pagehelper.PageInfo;
 
 import xyz.cincommon.exception.BlogException;
 import xyz.cincommon.mapper.BlogMapper;
+import xyz.cincommon.mapper.ForumMapper;
+import xyz.cincommon.mapper.TagMapper;
 import xyz.cincommon.model.BlogInfo;
 import xyz.cincommon.model.User;
 import xyz.cincommon.service.BlogService;
@@ -29,6 +31,10 @@ import xyz.cincommon.vo.ReturnResult;
 public class BlogServiceImpl implements BlogService {
 	@Autowired
 	private BlogMapper blogMapper;
+	@Autowired
+	private TagMapper tagMapper;
+	@Autowired
+	private ForumMapper forumMapper;
 
 	@Override
 	public ReturnResult<Map<String, Object>> initMain(int pageSize, int pageNum) throws IllegalAccessException, InvocationTargetException {
@@ -147,5 +153,13 @@ public class BlogServiceImpl implements BlogService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("blogInfo", blogInfo);
 		return ReturnResult.success(map);
+	}
+
+	@Override
+	public ReturnResult<Map<String, Object>> initBlogView() {
+		Map<String, Object> res = new HashMap<>();
+		res.put("tagList", tagMapper.findAllTagInfo());
+		res.put("forumList", forumMapper.findAllForumInfo());
+		return ReturnResult.success(res);
 	}
 }
