@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.cincommon.mapper.ForumInfoMapper" >
+  <resultMap id="BaseResultMap" type="xyz.cincommon.model.ForumInfo" >
+    <id column="forum_id" property="forumId" jdbcType="INTEGER" />
+    <result column="forum_name" property="forumName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="xyz.cincommon.model.ForumInfo" extends="BaseResultMap" >
+    <result column="forum_pic_url" property="forumPicUrl" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    forum_id, forum_name, create_date, create_user, update_date, update_user
+  </sql>
+  <sql id="Blob_Column_List" >
+    forum_pic_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from forum_info
+    where forum_id = #{forumId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from forum_info;
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from forum_info
+    where forum_id = #{forumId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="xyz.cincommon.model.ForumInfo" >
+    insert into forum_info (forum_id, forum_name, create_date, 
+      create_user, update_date, update_user, 
+      forum_pic_url)
+    values (#{forumId,jdbcType=INTEGER}, #{forumName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
+      #{forumPicUrl,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="xyz.cincommon.model.ForumInfo" >
+    insert into forum_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="forumId != null" >
+        forum_id,
+      </if>
+      <if test="forumName != null" >
+        forum_name,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="forumPicUrl != null" >
+        forum_pic_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="forumId != null" >
+        #{forumId,jdbcType=INTEGER},
+      </if>
+      <if test="forumName != null" >
+        #{forumName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="forumPicUrl != null" >
+        #{forumPicUrl,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xyz.cincommon.model.ForumInfo" >
+    update forum_info
+    <set >
+      <if test="forumName != null" >
+        forum_name = #{forumName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="forumPicUrl != null" >
+        forum_pic_url = #{forumPicUrl,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where forum_id = #{forumId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="xyz.cincommon.model.ForumInfo" >
+    update forum_info
+    set forum_name = #{forumName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      forum_pic_url = #{forumPicUrl,jdbcType=LONGVARCHAR}
+    where forum_id = #{forumId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xyz.cincommon.model.ForumInfo" >
+    update forum_info
+    set forum_name = #{forumName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER}
+    where forum_id = #{forumId,jdbcType=INTEGER}
+  </update>
+</mapper>

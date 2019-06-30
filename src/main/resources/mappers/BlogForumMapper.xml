@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.cincommon.mapper.BlogForumMapper" >
+  <resultMap id="BaseResultMap" type="xyz.cincommon.model.BlogForum" >
+    <result column="blog_id" property="blogId" jdbcType="INTEGER" />
+    <result column="forum_id" property="forumId" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="xyz.cincommon.model.BlogForum" >
+    insert into blog_forum (blog_id, forum_id)
+    values (#{blogId,jdbcType=INTEGER}, #{forumId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="xyz.cincommon.model.BlogForum" >
+    insert into blog_forum
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="blogId != null" >
+        blog_id,
+      </if>
+      <if test="forumId != null" >
+        forum_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="blogId != null" >
+        #{blogId,jdbcType=INTEGER},
+      </if>
+      <if test="forumId != null" >
+        #{forumId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -27,66 +27,12 @@ import xyz.cincommon.vo.ReturnResult;
 public class QueryController {
 	@Autowired
 	private BlogService blogService;
-	@Autowired
-	private TagService tagService;
-	@Autowired
-	private ForumService forumService;
-
-	@GetMapping("/blog/{id}")
-	public ReturnResult<Map<String, Object>> getBlog(@PathVariable("id") String id) {
-		return blogService.findBlogById(id);
-	}
 
 	@GetMapping("/initMain")
 	public ReturnResult<Map<String, Object>> initMain(
 			@RequestParam(required = false, name = "pageSize", defaultValue="10") int pageSize,
 			@RequestParam(required = false, name = "pageNum", defaultValue="1") int pageNum
-			) throws Exception {
+	) throws Exception {
 		return blogService.initMain(pageSize, pageNum);
-	}
-
-	@GetMapping("/queryByDate")
-	public ReturnResult<Map<String, List<BlogInfo>>> findBlog(@RequestParam(required = false, name = "uid") String uid,
-			@RequestParam(required = false, name = "startDate") String startStr,
-			@RequestParam(required = false, name = "endDate") String endStr) throws Exception {
-		Date startDate = null;
-		Date endDate = null;
-		if (!StringUtils.isEmpty(startStr)) {
-			startDate = new Date(Long.parseLong(startStr));
-		}
-		if (endStr != null) {
-			endDate = new Date(Long.parseLong(endStr));
-		}
-		return blogService.findBlog(uid, startDate, endDate);
-	}
-
-	@GetMapping("/getOneYearCount/{year}")
-	public ReturnResult<Map<String, Long>> getOneYearCount(@PathVariable("year") Integer year) {
-		return blogService.getOneYearCount(year);
-	}
-
-	@GetMapping("/getOneDayBlog/{date}")
-	public ReturnResult<List<BlogInfo>> getOneDayBlog(@PathVariable("date") String date) {
-		return blogService.getOneDayBlog(new Date(Long.parseLong(date)));
-	}
-
-	@GetMapping("/tag")
-	public ReturnResult<Collection<TagInfo>> getTag() {
-		return tagService.getTag();
-	}
-
-	@GetMapping("/tag/{id}")
-	public ReturnResult<TagInfo> getTagById(@PathVariable("id") String id) throws Exception {
-		return tagService.getTagById(id);
-	}
-
-	@GetMapping("/forum")
-	public ReturnResult<List<ForumInfo>> getForum() {
-		return forumService.getForum();
-	}
-
-	@GetMapping("/forum/{id}")
-	public ReturnResult<ForumInfo> getForumById(@PathVariable("id") String id) throws Exception {
-		return forumService.getForumById(id);
 	}
 }

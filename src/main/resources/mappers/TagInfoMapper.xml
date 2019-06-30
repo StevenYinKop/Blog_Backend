@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.cincommon.mapper.TagInfoMapper" >
+  <resultMap id="BaseResultMap" type="xyz.cincommon.model.TagInfo" >
+    <id column="tag_id" property="tagId" jdbcType="INTEGER" />
+    <result column="tag_name" property="tagName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="tagMap" type="xyz.cincommon.model.TagInfo">
+    <id property="tagId" column="tag_id" />
+    <result property="tagName" column="tag_name" />
+    <result property="createDate" column="create_date" />
+    <result property="createUser" column="create_user" />
+    <result property="updateDate" column="update_date" />
+    <result property="updateUser" column="update_user" />
+    <collection property="blogInfoSet"
+                ofType="xyz.cincommon.model.BlogInfo">
+      <result property="id" column="id" />
+      <result property="uid" column="uid" />
+      <result property="title" column="title" />
+      <result property="content" column="content" />
+      <result property="introduction" column="introduction" />
+      <result property="clickRates" column="click_rates" />
+      <result property="replyAmount" column="reply_amount" />
+      <result property="createDate" column="create_date2" />
+      <result property="createUser" column="create_user2" />
+      <result property="updateDate" column="update_date2" />
+      <result property="updateUser" column="update_user2" />
+      <collection property="tagInfoSet"
+                  ofType="xyz.cincommon.model.TagInfo">
+        <id property="tagId" column="tag_id2" />
+        <result property="tagName" column="tag_name2" />
+      </collection>
+    </collection>
+  </resultMap>
+  <select id="findAllTagInfo" resultMap="tagMap">
+		SELECT
+		t.*, bi.*
+		FROM
+		tag_info t
+		LEFT JOIN blog_tag bt ON t.tag_id = bt.tag_id
+		LEFT JOIN
+		blog_info bi ON bi.id = bt.blog_id
+	</select>
+  <select id="findTagById" resultMap="tagMap">
+		SELECT
+		b.tag_id,
+		b.tag_name,
+		b.create_date,
+		b.create_user,
+		b.create_date,
+		b.create_user,
+		a.id,
+		a.uid,
+		a.title,
+		a.content,
+		a.introduction,
+		a.click_rates,
+		a.reply_amount,
+		a.create_date AS create_date2,
+		a.create_user AS create_user2,
+		a.update_date AS update_date2,
+		a.update_user AS update_user2,
+		b2.tag_id AS tag_id2,
+		b2.tag_name AS tag_name2
+		FROM
+		blog_info AS a
+		LEFT JOIN blog_tag AS bi ON a.id = bi.blog_id
+		RIGHT JOIN tag_info AS b ON b.tag_id = bi.tag_id
+		LEFT JOIN blog_tag AS bt2 ON a.id = bt2.blog_id
+		LEFT JOIN tag_info AS b2 ON bt2.tag_id = b2.tag_id
+		WHERE
+		b.tag_id = #{id}
+	</select>
+  <sql id="Base_Column_List" >
+    tag_id, tag_name, create_date, create_user, update_date, update_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tag_info
+    where tag_id = #{tagId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tag_info
+    where tag_id = #{tagId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="xyz.cincommon.model.TagInfo" >
+    insert into tag_info (tag_id, tag_name, create_date, 
+      create_user, update_date, update_user
+      )
+    values (#{tagId,jdbcType=INTEGER}, #{tagName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="xyz.cincommon.model.TagInfo" >
+    insert into tag_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tagId != null" >
+        tag_id,
+      </if>
+      <if test="tagName != null" >
+        tag_name,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tagId != null" >
+        #{tagId,jdbcType=INTEGER},
+      </if>
+      <if test="tagName != null" >
+        #{tagName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xyz.cincommon.model.TagInfo" >
+    update tag_info
+    <set >
+      <if test="tagName != null" >
+        tag_name = #{tagName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+    </set>
+    where tag_id = #{tagId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xyz.cincommon.model.TagInfo" >
+    update tag_info
+    set tag_name = #{tagName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER}
+    where tag_id = #{tagId,jdbcType=INTEGER}
+  </update>
+</mapper>

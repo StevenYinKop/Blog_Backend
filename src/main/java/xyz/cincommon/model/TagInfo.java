@@ -16,4 +16,5 @@ public class TagInfo {
 	private Timestamp updateDate;
 	private Integer updateUser;
 	private Set<BlogInfo> blogInfoSet;
+
 }

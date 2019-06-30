@@ -1,53 +1,47 @@
 package xyz.cincommon.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-
 import xyz.cincommon.exception.BlogException;
-import xyz.cincommon.mapper.BlogMapper;
-import xyz.cincommon.mapper.ForumMapper;
-import xyz.cincommon.mapper.TagMapper;
+import xyz.cincommon.mapper.BlogInfoMapper;
+import xyz.cincommon.mapper.ForumInfoMapper;
+import xyz.cincommon.mapper.TagInfoMapper;
 import xyz.cincommon.model.BlogInfo;
 import xyz.cincommon.model.User;
 import xyz.cincommon.service.BlogService;
 import xyz.cincommon.vo.CodeMsg;
 import xyz.cincommon.vo.ReturnResult;
 
+import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 @Service
 public class BlogServiceImpl implements BlogService {
 	@Autowired
-	private BlogMapper blogMapper;
+	private BlogInfoMapper blogInfoMapper;
 	@Autowired
-	private TagMapper tagMapper;
+	private TagInfoMapper tagInfoMapper;
 	@Autowired
-	private ForumMapper forumMapper;
+	private ForumInfoMapper forumInfoMapper;
 
 	@Override
-	public ReturnResult<Map<String, Object>> initMain(int pageSize, int pageNum) throws IllegalAccessException, InvocationTargetException {
+	public ReturnResult<Map<String, Object>> initMain(int pageSize, int pageNum) {
 		Map<String, Object> result = new HashMap<>();
-		Integer total = blogMapper.countBlog();
+		Integer total = blogInfoMapper.countBlog();
 		result.put("total", total);
-		result.put("list", blogMapper.findTop10BlogInfo(pageSize * pageNum, pageSize));
+		result.put("list", blogInfoMapper.findTop10BlogInfo(pageSize * pageNum, pageSize));
 		return ReturnResult.success(result);
 	}
 
 	@Override
 	public ReturnResult<Map<String, Object>> findBlogById(String id) {
-		List<BlogInfo> blogInfoList = blogMapper.findByIdWithPrePost(id);
+		List<BlogInfo> blogInfoList = blogInfoMapper.findByIdWithPrePost(id);
 		BlogInfo currentBlog = null, prevBlog = null, postBlog = null;
 		Integer currentId = Integer.valueOf(id);
 		for (BlogInfo blogInfo : blogInfoList) {
@@ -61,7 +55,7 @@ public class BlogServiceImpl implements BlogService {
 		}
 		if (currentBlog != null) {
 			currentBlog.setClickRates(currentBlog.getClickRates() + 1);
-			blogMapper.updateBlog(currentBlog);
+			blogInfoMapper.updateBlog(currentBlog);
 		} else {
 			return ReturnResult.error(CodeMsg.NOT_FIND_DATA);
 		}
@@ -74,7 +68,7 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public ReturnResult<Map<String, List<BlogInfo>>> findBlog(String uid, Date startDate, Date endDate) {
-		List<BlogInfo> blogInfoList = blogMapper.findBlog(startDate, endDate, uid);
+		List<BlogInfo> blogInfoList = blogInfoMapper.findBlog(startDate, endDate, uid);
 		SimpleDateFormat sdfbyDay = new SimpleDateFormat("yyyy/MM/dd");
 		Map<String, List<BlogInfo>> result = new HashMap<>();
 		for (BlogInfo blogInfo : blogInfoList) {
@@ -91,14 +85,14 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public ReturnResult<List<BlogInfo>> getOneDayBlog(Date date) {
-		List<BlogInfo> blogInfoList = blogMapper.findBlog(date, null, null);
+		List<BlogInfo> blogInfoList = blogInfoMapper.findBlog(date, null, null);
 		return ReturnResult.success(blogInfoList);
 	}
 
 	@Override
 	public ReturnResult<Map<String, Long>> getOneYearCount(Integer year) {
 		Map<String, Long> result = new HashMap<>();
-		List<Map<String, Object>> blogCount = blogMapper.findOneYearBlogCount(year);
+		List<Map<String, Object>> blogCount = blogInfoMapper.findOneYearBlogCount(year);
 		for (Map<String, Object> map : blogCount) {
 			String month = (String) map.get("month");
 			Long count = (Long) map.get("count");
@@ -114,7 +108,7 @@ public class BlogServiceImpl implements BlogService {
 		String[] tagIdArray = StringUtils.splitByWholeSeparator(tagIdList, ",");
 		PageHelper.startPage(pageNum, pageSize);
 		PageInfo<BlogInfo> pageInfo = new PageInfo<>(
-				blogMapper.findBlogByKeywordTagForum(keyword, tagIdArray, forumId));
+				blogInfoMapper.findBlogByKeywordTagForum(keyword, tagIdArray, forumId));
 		map.put("pageInfo", pageInfo);
 		return ReturnResult.success(map);
 	}
@@ -126,7 +120,7 @@ public class BlogServiceImpl implements BlogService {
 		Integer uid = principal.getUid();
 		BlogInfo blogInfo;
 		if (StringUtils.isEmpty(blogId)) {
-			blogInfo = blogMapper.findById(blogId);
+			blogInfo = blogInfoMapper.findById(blogId);
 			if (ObjectUtils.isEmpty(blogInfo)) {
 				throw new BlogException(CodeMsg.NOT_FIND_BLOG);
 			}
@@ -135,7 +129,7 @@ public class BlogServiceImpl implements BlogService {
 			blogInfo.setTitle(title);
 			blogInfo.setUpdateUser(uid.toString());
 			blogInfo.setUpdateDate(new Date());
-			blogMapper.updateBlog(blogInfo);
+			blogInfoMapper.updateBlog(blogInfo);
 		} else {
 			blogInfo = new BlogInfo();
 			blogInfo.setUid(uid);
@@ -148,7 +142,7 @@ public class BlogServiceImpl implements BlogService {
 			blogInfo.setCreateDate(new Date());
 			blogInfo.setUpdateUser(uid.toString());
 			blogInfo.setUpdateDate(new Date());
-			blogMapper.insertBlog(blogInfo);
+			blogInfoMapper.insertBlog(blogInfo);
 		}
 		Map<String, Object> map = new HashMap<>();
 		map.put("blogInfo", blogInfo);
@@ -158,8 +152,8 @@ public class BlogServiceImpl implements BlogService {
 	@Override
 	public ReturnResult<Map<String, Object>> initBlogView() {
 		Map<String, Object> res = new HashMap<>();
-		res.put("tagList", tagMapper.findAllTagInfo());
-		res.put("forumList", forumMapper.findAllForumInfo());
+		res.put("tagList", tagInfoMapper.findAllTagInfo());
+		res.put("forumList", forumInfoMapper.selectAll());
 		return ReturnResult.success(res);
 	}
 }
