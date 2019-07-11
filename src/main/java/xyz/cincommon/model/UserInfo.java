@@ -1,8 +1,8 @@
 package xyz.cincommon.model;
 
-import lombok.Data;
-
 import java.util.Date;
+
+import lombok.Data;
 @Data
 public class UserInfo {
     private Integer uid;

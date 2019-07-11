@@ -4,10 +4,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import xyz.cincommon.mapper.TagInfoMapper;
 import xyz.cincommon.model.TagInfo;
@@ -27,6 +28,7 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ReturnResult<PageInfo<TagInfo>> getTag(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		PageInfo info = new PageInfo(tagInfoMapper.findAllTagInfo());

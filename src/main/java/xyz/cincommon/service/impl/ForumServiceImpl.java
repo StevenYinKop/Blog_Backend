@@ -1,14 +1,14 @@
 package xyz.cincommon.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import xyz.cincommon.mapper.ForumInfoMapper;
 import xyz.cincommon.model.ForumInfo;
 import xyz.cincommon.service.ForumService;
 import xyz.cincommon.vo.ReturnResult;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 @Service
 public class ForumServiceImpl implements ForumService{
 

@@ -232,6 +232,7 @@
 		res.create_date,
 		ti.tag_id,
 		ti.tag_name FROM (SELECT * FROM blog_info AS bi
+		ORDER BY create_date DESC
 		LIMIT #{start},
 		#{offset}) AS res
 		INNER JOIN

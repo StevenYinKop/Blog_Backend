@@ -1,8 +1,8 @@
 package xyz.cincommon.mapper;
 
-import xyz.cincommon.model.TagInfo;
-
 import java.util.List;
+
+import xyz.cincommon.model.TagInfo;
 
 public interface TagInfoMapper {
 

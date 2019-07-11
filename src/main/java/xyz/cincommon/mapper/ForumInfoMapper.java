@@ -1,8 +1,8 @@
 package xyz.cincommon.mapper;
 
-import xyz.cincommon.model.ForumInfo;
-
 import java.util.List;
+
+import xyz.cincommon.model.ForumInfo;
 
 public interface ForumInfoMapper {
     int deleteByPrimaryKey(Integer forumId);
