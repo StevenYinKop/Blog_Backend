@@ -46,6 +46,7 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public ReturnResult<Map<String, Object>> findBlogById(String id) {
+		// 查找当前Blog, 同时查出相邻的两篇博客用于预览
 		List<BlogInfo> blogInfoList = blogInfoMapper.findByIdWithPrePost(id);
 		BlogInfo currentBlog = null, prevBlog = null, postBlog = null;
 		Integer currentId = Integer.valueOf(id);
@@ -53,8 +54,14 @@ public class BlogServiceImpl implements BlogService {
 			if (blogInfo.getId() == currentId) {
 				currentBlog = blogInfo;
 			} else if (blogInfo.getId() > currentId) {
+				postBlog = new BlogInfo();
+				postBlog.setId(blogInfo.getId());
+				postBlog.setTitle(blogInfo.getTitle());
 				postBlog = blogInfo;
 			} else if (blogInfo.getId() < currentId) {
+				prevBlog = new BlogInfo();
+				prevBlog.setId(blogInfo.getId());
+				prevBlog.setTitle(blogInfo.getTitle());
 				prevBlog = blogInfo;
 			}
 		}
