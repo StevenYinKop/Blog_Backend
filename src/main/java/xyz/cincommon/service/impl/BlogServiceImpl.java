@@ -7,8 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -23,6 +24,8 @@ import xyz.cincommon.mapper.TagInfoMapper;
 import xyz.cincommon.model.BlogInfo;
 import xyz.cincommon.model.User;
 import xyz.cincommon.service.BlogService;
+import xyz.cincommon.utils.Constant;
+import xyz.cincommon.utils.SessionUtil;
 import xyz.cincommon.vo.CodeMsg;
 import xyz.cincommon.vo.ReturnResult;
 
@@ -68,6 +71,9 @@ public class BlogServiceImpl implements BlogService {
 		if (currentBlog != null) {
 			currentBlog.setClickRates(currentBlog.getClickRates() + 1);
 			blogInfoMapper.updateBlog(currentBlog);
+			String content = currentBlog.getContent();
+			String result = replaceWildcard(content);
+			currentBlog.setContent(result);
 		} else {
 			return ReturnResult.error(CodeMsg.NOT_FIND_DATA);
 		}
@@ -76,6 +82,10 @@ public class BlogServiceImpl implements BlogService {
 		result.put("prevBlog", prevBlog);
 		result.put("postBlog", postBlog);
 		return ReturnResult.success(result);
+	}
+
+	private String replaceWildcard(String content) {
+		return content.replaceAll(Constant.CONTENT_URL_WILDCARD, "");
 	}
 
 	@Override
@@ -126,10 +136,10 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
-	public ReturnResult<Map<String, Object>> saveBlogInfo(String blogId, String title, String content,
+	public ReturnResult<Map<String, Object>> saveBlogInfo(HttpServletRequest request, String blogId, String title, String content,
 			String introduction) throws BlogException {
-		User principal = (User) SecurityUtils.getSubject().getPrincipal();
-		Integer uid = principal.getUid();
+		User user = SessionUtil.getUser(request);
+		Integer uid = user.getUid();
 		BlogInfo blogInfo;
 		if (StringUtils.isEmpty(blogId)) {
 			blogInfo = blogInfoMapper.findById(blogId);

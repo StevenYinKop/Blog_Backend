@@ -3,6 +3,7 @@ package xyz.cincommon;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -14,6 +15,7 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import xyz.cincommon.vo.SpringUtils;
 
 @SpringBootApplication
 @ComponentScan
@@ -22,7 +24,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class BlogManagerByJavaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BlogManagerByJavaApplication.class, args);
+		ConfigurableApplicationContext ctx = SpringApplication.run(BlogManagerByJavaApplication.class, args);
+		SpringUtils.init(ctx);
 	}
 
 	/**

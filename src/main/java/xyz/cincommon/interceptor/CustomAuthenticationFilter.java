@@ -1,19 +1,19 @@
-package xyz.cincommon.interceptor;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-
-import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+//package xyz.cincommon.interceptor;
+//
+//import javax.servlet.ServletRequest;
+//import javax.servlet.ServletResponse;
+//
+//import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+//
 //import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
-
-public class CustomAuthenticationFilter extends FormAuthenticationFilter {
-	private static final Logger log = LoggerFactory.getLogger(FormAuthenticationFilter.class);
-
-	@Override
-	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+//
+//public class CustomAuthenticationFilter extends FormAuthenticationFilter {
+//	private static final Logger log = LoggerFactory.getLogger(FormAuthenticationFilter.class);
+//
+//	@Override
+//	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 //		if (isLoginRequest(request, response)) {
 //			if (isLoginSubmission(request, response)) {
 //				if (log.isTraceEnabled()) {
@@ -48,6 +48,6 @@ public class CustomAuthenticationFilter extends FormAuthenticationFilter {
 //        map.put("msg", "未登录");
 //        writer.write();
 //        writer.close();
-		throw new Exception(11+ "");
-	}
-}
+//		throw new Exception(11+ "");
+//	}
+//}

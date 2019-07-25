@@ -2,6 +2,8 @@ package xyz.cincommon.controller.admin;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,10 +62,10 @@ public class BlogAdminController {
     @ResponseBody
     public ReturnResult<Map<String, Object>> saveBlogInfo(@RequestParam(required = false) String blogId,
                                                           @RequestParam(required = false) String user, String title, String content, String introduction,
-                                                          String tagIdList, @RequestParam(required = false) String forumId) throws BlogException {
+                                                          String tagIdList, @RequestParam(required = false) String forumId, HttpServletRequest request) throws BlogException {
         if (StringUtils.isBlank(tagIdList)) {
             throw new BlogException("No tag bind");
         }
-        return blogService.saveBlogInfo(blogId, title, content, introduction);
+        return blogService.saveBlogInfo(request, blogId, title, content, introduction);
     }
 }

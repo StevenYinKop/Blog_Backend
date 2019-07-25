@@ -14,10 +14,10 @@ import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EncryptedUtils {
+public class EncryptedUtil {
 	private static final Base64.Decoder DECODER = Base64.getDecoder();
 	private static final Base64.Encoder ENCODER = Base64.getEncoder();
-	private static final Logger logger = LoggerFactory.getLogger(EncryptedUtils.class); 
+	private static final Logger logger = LoggerFactory.getLogger(EncryptedUtil.class); 
 
 	public static String encrypt(String src, String key){
 		String result = src;
@@ -53,6 +53,7 @@ public class EncryptedUtils {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(decrypt("9DqWB84slc+eh742SPz3lc/adeuXeX2pY9GmFzhM1+PGQOTdYBNBvsaYxvrTvS1ctgdm6VLOJFuVkHeQIt2aV75BBZvGVnqzLIG7snNSvB4HQyMiObfSU72ox6ji5sK3", Constant.DEFAULT_ENCRYPT_KEY));
+		System.out.println(encrypt("jdbc:mysql://47.102.152.87:3306/ynwa_dev?characterEncoding=UTF-8&serverTimezone=GMT%2B8", Constant.DEFAULT_ENCRYPT_KEY));
+//		System.out.println(decrypt("9DqWB84slc+eh742SPz3lc/adeuXeX2pY9GmFzhM1+PGQOTdYBNBvsaYxvrTvS1ctgdm6VLOJFuVkHeQIt2aV75BBZvGVnqzLIG7snNSvB4HQyMiObfSU72ox6ji5sK3", Constant.DEFAULT_ENCRYPT_KEY));
 	}
 }

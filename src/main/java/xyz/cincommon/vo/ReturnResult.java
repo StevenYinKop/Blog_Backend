@@ -48,6 +48,11 @@ public class ReturnResult<T> {
 		cm.setMessage(cm.getMessage()+"--"+msg);
 		return new ReturnResult<T>(cm);
 	}
+	
+	public boolean isOk() {
+		return retCode == 0;
+	}
+	
 	public T getData() {
 		return data;
 	}
