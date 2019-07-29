@@ -85,7 +85,7 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	private String replaceWildcard(String content) {
-		return content.replaceAll(Constant.CONTENT_URL_WILDCARD, "");
+		return StringUtils.replace(content, Constant.CONTENT_URL_WILDCARD, "http://47.102.152.87");
 	}
 
 	@Override

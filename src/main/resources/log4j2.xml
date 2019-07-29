@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" monitorInterval="1" strict="true" name="LogConfig">
+	<Properties>
+		<Property name="log.home">./logs</Property>
+		<Property name="log.layout">%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger : %msg%n</Property>
+		<Property name="log.name">cincommon_blog_app</Property>
+		<Property name="log.suffix">log</Property>
+	</Properties>
+    <Appenders>
+    	<Appender type="Console" name="STDOUT">
+    		<Target>SYSTEM_OUT</Target>
+    		<Layout type="PatternLayout" pattern="${log.layout}"/>
+    	</Appender>
+    	<Appender type="RollingFile" name="FILE" fileName="${log.home}/${log.name}" filePattern="${log.home}/history/${log.name}.%d{yyyyMMdd}.%i.${log.suffix}">
+    		<Policies>
+    			<TimeBasedTriggeringPolicy interval="1" />
+    			<SizeBasedTriggeringPolicy size="100MB" />
+    		</Policies>
+    		<DefaultRolloverStrategy>
+    			<Delete basePath="${log.home}" maxDepth="2">
+    				<IfFileName glob="*/${log.name}*.${log.suffix}">
+    					<IfLastModified age="30d">
+    						<IfAny>
+    							<IfAccumulatedFileSzie exceeds="2 2GB" />
+    							<IfAccumulatedFileCount exceeds="30" />
+    						</IfAny>
+    					</IfLastModified>
+    				</IfFileName>
+    			</Delete>
+    		</DefaultRolloverStrategy>
+    		<Layout type="PatternLayout">
+    			<Charset>UTF-8</Charset>
+    			<Pattern>${log.layout}</Pattern>
+    		</Layout>
+    	</Appender>
+<!--         <Console name="LogToConsole" target="SYSTEM_OUT"> -->
+<!--             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/> -->
+<!--         </Console> -->
+<!--         <File name="FILE" fileName="logs/app.log"> -->
+<!--             <PatternLayout> -->
+<!--                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern> -->
+<!--             </PatternLayout> -->
+<!--         </File> -->
+    </Appenders>
+    <Loggers>
+        <Logger name="xyz.cincommon" level="debug" additivity="false">
+            <AppenderRef ref="FILE"/>
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+        <Logger name="org.springframework.boot" level="error" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+        <Root level="INFO">
+            <AppenderRef ref="FILE"/>
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+</Configuration>

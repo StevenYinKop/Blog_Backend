@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.cincommon.mapper.SysEnvMapper" >
+  <resultMap id="BaseResultMap" type="xyz.cincommon.model.SysEnv" >
+    <id column="env_name" property="envName" jdbcType="VARCHAR" />
+    <result column="env_value" property="envValue" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    env_name, env_value
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_env
+    where env_name = #{envName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_env
+    where env_name = #{envName,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="xyz.cincommon.model.SysEnv" >
+    insert into sys_env (env_name, env_value)
+    values (#{envName,jdbcType=VARCHAR}, #{envValue,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="xyz.cincommon.model.SysEnv" >
+    insert into sys_env
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="envName != null" >
+        env_name,
+      </if>
+      <if test="envValue != null" >
+        env_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="envName != null" >
+        #{envName,jdbcType=VARCHAR},
+      </if>
+      <if test="envValue != null" >
+        #{envValue,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xyz.cincommon.model.SysEnv" >
+    update sys_env
+    <set >
+      <if test="envValue != null" >
+        env_value = #{envValue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where env_name = #{envName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xyz.cincommon.model.SysEnv" >
+    update sys_env
+    set env_value = #{envValue,jdbcType=VARCHAR}
+    where env_name = #{envName,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByKeys" resultMap="BaseResultMap" parameterType="list">
+  	select 
+    <include refid="Base_Column_List" />
+    from sys_env
+    where env_name in (
+	  <foreach item="key" collection="list" separator=",">
+	    #{key, jdbcType=VARCHAR}
+	  </foreach>    
+    )
+  </select>
+</mapper>
