@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class Role {
-
 	private Integer rid;
 	private String name;
 	private Set<Permission> permissions = new HashSet<>();

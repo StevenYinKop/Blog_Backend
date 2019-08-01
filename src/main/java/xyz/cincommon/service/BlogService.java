@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import xyz.cincommon.exception.BlogException;
 import xyz.cincommon.model.BlogInfo;
 import xyz.cincommon.vo.ReturnResult;
@@ -23,7 +21,7 @@ public interface BlogService {
 
 	ReturnResult<Map<String, Object>> getBlogList(String keyword, String tagIdList, String forumId, int pageSize, int pageNum);
 
-	ReturnResult<Map<String, Object>> saveBlogInfo(HttpServletRequest request, String blogId, String title, String content,
+	ReturnResult<Map<String, Object>> saveBlogInfo(String blogId, String title, String content,
 			String introduction) throws BlogException;
 
 	ReturnResult<Map<String, Object>> initBlogView();

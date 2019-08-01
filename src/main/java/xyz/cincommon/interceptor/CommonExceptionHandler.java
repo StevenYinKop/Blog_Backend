@@ -2,14 +2,14 @@ package xyz.cincommon.interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import xyz.cincommon.exception.BlogException;
 import xyz.cincommon.vo.CodeMsg;
 import xyz.cincommon.vo.ReturnResult;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class CommonExceptionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommonExceptionHandler.class);
 
@@ -17,7 +17,7 @@ public class CommonExceptionHandler {
 	public ReturnResult<String> exceptionHandle(BlogException e) {
 		e.printStackTrace();
 		LOGGER.error(e.getMessage());
-		return ReturnResult.error(e.getCodeMsg(), e.getMessage());
+		return ReturnResult.error(e.getCodeMsg());
 	}
 
 //	@ExceptionHandler(AuthorizationException.class)

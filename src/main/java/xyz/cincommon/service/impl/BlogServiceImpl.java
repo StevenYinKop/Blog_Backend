@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,7 @@ import xyz.cincommon.model.BlogInfo;
 import xyz.cincommon.model.User;
 import xyz.cincommon.service.BlogService;
 import xyz.cincommon.utils.Constant;
-import xyz.cincommon.utils.SessionUtil;
+import xyz.cincommon.utils.UserUtil;
 import xyz.cincommon.vo.CodeMsg;
 import xyz.cincommon.vo.ReturnResult;
 
@@ -136,9 +134,9 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
-	public ReturnResult<Map<String, Object>> saveBlogInfo(HttpServletRequest request, String blogId, String title, String content,
+	public ReturnResult<Map<String, Object>> saveBlogInfo(String blogId, String title, String content,
 			String introduction) throws BlogException {
-		User user = SessionUtil.getUser(request);
+		User user = UserUtil.getUser();
 		Integer uid = user.getUid();
 		BlogInfo blogInfo;
 		if (StringUtils.isEmpty(blogId)) {

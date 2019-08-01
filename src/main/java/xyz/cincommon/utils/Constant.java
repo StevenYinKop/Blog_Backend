@@ -11,4 +11,22 @@ public class Constant {
 	public class Blog {
 		public static final int SUMMARY_LENGTH = 200;
 	}
+	
+	public enum Role {
+		ADMIN(1, "admin"),
+		BLOGGER(2, "blogger"),
+		USER(3, "user");
+		private int id;
+		private String name;
+		private Role(int id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+		public int getId() {
+			return id;
+		}
+		public String getName() {
+			return name;
+		}
+	}
 }
