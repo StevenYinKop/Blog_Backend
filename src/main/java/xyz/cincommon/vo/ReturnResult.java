@@ -45,8 +45,9 @@ public class ReturnResult<T> {
 	 * @return
 	 */
 	public static <T> ReturnResult<T> error(CodeMsg cm,String msg){
-		cm.setMessage(cm.getMessage()+"--"+msg);
-		return new ReturnResult<T>(cm);
+		ReturnResult<T> result = new ReturnResult<T>(cm);
+		result.message = result.message + msg; 
+		return result;
 	}
 	
 	public boolean isOk() {

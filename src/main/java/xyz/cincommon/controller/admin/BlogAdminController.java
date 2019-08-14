@@ -2,6 +2,9 @@ package xyz.cincommon.controller.admin;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,27 +32,28 @@ public class BlogAdminController {
 
     @GetMapping("/initBlogView")
     @ResponseBody
-    public ReturnResult<Map<String, Object>> initBlogView() {
-		userService.checkCurrentUserRole(Constant.Role.ADMIN, Constant.Role.BLOGGER);
+    public ReturnResult<Map<String, Object>> initBlogView(HttpServletRequest request) {
+		userService.checkCurrentUserRole(request.getSession(), Constant.Role.ADMIN, Constant.Role.BLOGGER);
         return blogService.initBlogView();
     }
 
     @GetMapping("/getBlogList")
     @ResponseBody
     public ReturnResult<Map<String, Object>> getBlogList(
+    		HttpSession session,
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "tagIdList", required = false, defaultValue = "") String tagIdList,
             @RequestParam(value = "forumId", required = false) String forumId,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum) {
-		userService.checkCurrentUserRole(Constant.Role.ADMIN, Constant.Role.BLOGGER);
+		userService.checkCurrentUserRole(session, Constant.Role.ADMIN, Constant.Role.BLOGGER);
         return blogService.getBlogList(keyword, tagIdList, forumId, pageSize, pageNum);
     }
 
     @GetMapping("/getBlogById")
     @ResponseBody
-    public ReturnResult<Map<String, Object>> getBlogById(int id) {
-		userService.checkCurrentUserRole(Constant.Role.ADMIN, Constant.Role.BLOGGER);
+    public ReturnResult<Map<String, Object>> getBlogById(HttpSession session, int id) {
+		userService.checkCurrentUserRole(session, Constant.Role.ADMIN, Constant.Role.BLOGGER);
         return null;
     }
 
@@ -66,10 +70,11 @@ public class BlogAdminController {
      */
     @PostMapping("/saveBlog")
     @ResponseBody
-    public ReturnResult<Map<String, Object>> saveBlogInfo(@RequestParam(required = false) String blogId,
+    public ReturnResult<Map<String, Object>> saveBlogInfo(HttpSession session,
+    													  @RequestParam(required = false) String blogId,
                                                           @RequestParam(required = false) String user, String title, String content, String introduction,
                                                           String tagIdList, @RequestParam(required = false) String forumId) throws BlogException {
-    	userService.checkCurrentUserRole(Constant.Role.ADMIN, Constant.Role.BLOGGER);
+    	userService.checkCurrentUserRole(session, Constant.Role.ADMIN, Constant.Role.BLOGGER);
         if (StringUtils.isBlank(tagIdList)) {
             throw new BlogException("没有选择Tag");
         }

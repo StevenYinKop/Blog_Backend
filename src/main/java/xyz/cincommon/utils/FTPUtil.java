@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import xyz.cincommon.config.FTPConfigInfo;
-import xyz.cincommon.vo.SpringUtils;
 
 public class FTPUtil {
 

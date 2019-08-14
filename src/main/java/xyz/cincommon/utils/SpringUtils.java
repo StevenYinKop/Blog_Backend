@@ -1,4 +1,4 @@
-package xyz.cincommon.vo;
+package xyz.cincommon.utils;
 
 import org.springframework.context.ApplicationContext;
 

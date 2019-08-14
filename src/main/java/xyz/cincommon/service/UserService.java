@@ -2,6 +2,8 @@ package xyz.cincommon.service;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpSession;
+
 import xyz.cincommon.model.Role;
 import xyz.cincommon.model.User;
 import xyz.cincommon.utils.Constant;
@@ -15,5 +17,8 @@ public interface UserService {
 	
 	Collection<Role> queryRoleByUser(User user);
 	
-	void checkCurrentUserRole(Constant.Role ... roles);
+	void checkCurrentUserRole(HttpSession session, Constant.Role ... roles);
+
+	ReturnResult<String> verifyLogin();
+
 }

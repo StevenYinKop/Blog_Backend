@@ -15,26 +15,12 @@ public class CommonExceptionHandler {
 
 	@ExceptionHandler(BlogException.class)
 	public ReturnResult<String> exceptionHandle(BlogException e) {
-		e.printStackTrace();
 		LOGGER.error(e.getMessage());
 		return ReturnResult.error(e.getCodeMsg());
 	}
 
-//	@ExceptionHandler(AuthorizationException.class)
-//	public ReturnResult<String> exceptionHandle(AuthorizationException e) {
-//		e.printStackTrace();
-//		LOGGER.error(e.getMessage());
-//		return ReturnResult.error(CodeMsg.SERVER_EXCEPTION, e.getMessage());
-//	}
-//	@ExceptionHandler(UnauthenticatedException.class)
-//	public ReturnResult<String> exceptionHandle(UnauthenticatedException e) {
-//		e.printStackTrace();
-//		LOGGER.error(e.getMessage());
-//		return ReturnResult.error(CodeMsg.SERVER_EXCEPTION, e.getMessage());
-//	}
 	@ExceptionHandler(Exception.class)
 	public ReturnResult<String> exceptionHandle(Exception e) {
-		e.printStackTrace();
 		LOGGER.error(e.getMessage());
 		return ReturnResult.error(CodeMsg.SERVER_EXCEPTION, e.getMessage());
 	}

@@ -47,13 +47,12 @@ public class EncryptedUtil {
 			result = new String(original, "UTF-8");
 		} catch (InvalidKeyException | UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException
 				| IllegalBlockSizeException | BadPaddingException e) {
-			logger.error(e.getMessage());
+			logger.error(e.toString());
 		}
 		return result;
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(encrypt("jdbc:mysql://47.102.152.87:3306/ynwa_dev?characterEncoding=UTF-8&serverTimezone=GMT%2B8", Constant.DEFAULT_ENCRYPT_KEY));
-//		System.out.println(decrypt("9DqWB84slc+eh742SPz3lc/adeuXeX2pY9GmFzhM1+PGQOTdYBNBvsaYxvrTvS1ctgdm6VLOJFuVkHeQIt2aV75BBZvGVnqzLIG7snNSvB4HQyMiObfSU72ox6ji5sK3", Constant.DEFAULT_ENCRYPT_KEY));
+		System.out.println(encrypt("123456", Constant.DEFAULT_ENCRYPT_KEY));
 	}
 }

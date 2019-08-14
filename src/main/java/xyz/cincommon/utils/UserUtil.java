@@ -1,6 +1,7 @@
 package xyz.cincommon.utils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -12,16 +13,19 @@ import xyz.cincommon.vo.CodeMsg;
 public class UserUtil {
 
 	public static void putUser(User user) {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		request.setAttribute(Constant.CURRENT_USER, user);
+		HttpSession session = getRequest().getSession();
+		session.setAttribute(Constant.CURRENT_USER, user);
 	}
 	
 	public static User getUser() {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		Object user = request.getAttribute(Constant.CURRENT_USER);
+		HttpSession session = getRequest().getSession();
+		Object user = session.getAttribute(Constant.CURRENT_USER);
 		if(null == user){
 			throw new BlogException(CodeMsg.LOGIN_EXPIRED);
 		}
 		return (User) user;
+	}
+	public static HttpServletRequest getRequest() {
+		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 	}
 }
