@@ -1,225 +1,245 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="xyz.cincommon.mapper.BlogInfoMapper" >
-  <resultMap id="BaseResultMap" type="xyz.cincommon.model.BlogInfo" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="CHAR" />
-    <result column="click_rates" property="clickRates" jdbcType="INTEGER" />
-    <result column="reply_amount" property="replyAmount" jdbcType="INTEGER" />
-    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
-    <result column="create_user" property="createUser" jdbcType="INTEGER" />
-    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
-    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
-  </resultMap>
-  <resultMap id="blogMap" type="xyz.cincommon.model.BlogInfo">
-    <id property="id" column="id" />
-    <result property="uid" column="uid" />
-    <result property="title" column="title" />
-    <result property="content" column="content" />
-    <result property="introduction" column="introduction" />
-    <result property="status" column="status" />
-    <result property="clickRates" column="click_rates" />
-    <result property="replyAmount" column="reply_amount" />
-    <result property="createUser" column="create_user" />
-    <result property="createDate" column="create_date" />
-    <result property="updateDate" column="update_date" />
-    <result property="updateUser" column="update_user" />
-    <association property="forumInfo"
-                 javaType="xyz.cincommon.model.ForumInfo" />
-    <collection property="tagInfoSet"
-                ofType="xyz.cincommon.model.TagInfo">
-      <id property="tagId" column="tag_id" />
-      <result property="tagName" column="tag_name" />
-    </collection>
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="xyz.cincommon.model.BlogInfo" extends="BaseResultMap" >
-    <result column="content" property="content" jdbcType="LONGVARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, uid, title, introduction, status, click_rates, reply_amount, create_date, create_user, 
-    update_date, update_user
-  </sql>
-  <sql id="Blob_Column_List" >
-    content
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from blog_info
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from blog_info
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="xyz.cincommon.model.BlogInfo" >
-    insert into blog_info (id, uid, title, 
-      introduction, status, click_rates, 
-      reply_amount, create_date, create_user, 
-      update_date, update_user, content
-      )
-    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
-      #{introduction,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{clickRates,jdbcType=INTEGER}, 
-      #{replyAmount,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
-      #{updateDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="xyz.cincommon.model.BlogInfo" >
-    insert into blog_info
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="uid != null" >
-        uid,
-      </if>
-      <if test="title != null" >
-        title,
-      </if>
-      <if test="introduction != null" >
-        introduction,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="clickRates != null" >
-        click_rates,
-      </if>
-      <if test="replyAmount != null" >
-        reply_amount,
-      </if>
-      <if test="createDate != null" >
-        create_date,
-      </if>
-      <if test="createUser != null" >
-        create_user,
-      </if>
-      <if test="updateDate != null" >
-        update_date,
-      </if>
-      <if test="updateUser != null" >
-        update_user,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="uid != null" >
-        #{uid,jdbcType=INTEGER},
-      </if>
-      <if test="title != null" >
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="introduction != null" >
-        #{introduction,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=CHAR},
-      </if>
-      <if test="clickRates != null" >
-        #{clickRates,jdbcType=INTEGER},
-      </if>
-      <if test="replyAmount != null" >
-        #{replyAmount,jdbcType=INTEGER},
-      </if>
-      <if test="createDate != null" >
-        #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createUser != null" >
-        #{createUser,jdbcType=INTEGER},
-      </if>
-      <if test="updateDate != null" >
-        #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateUser != null" >
-        #{updateUser,jdbcType=INTEGER},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="xyz.cincommon.model.BlogInfo" >
-    update blog_info
-    <set >
-      <if test="uid != null" >
-        uid = #{uid,jdbcType=INTEGER},
-      </if>
-      <if test="title != null" >
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="introduction != null" >
-        introduction = #{introduction,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=CHAR},
-      </if>
-      <if test="clickRates != null" >
-        click_rates = #{clickRates,jdbcType=INTEGER},
-      </if>
-      <if test="replyAmount != null" >
-        reply_amount = #{replyAmount,jdbcType=INTEGER},
-      </if>
-      <if test="createDate != null" >
-        create_date = #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createUser != null" >
-        create_user = #{createUser,jdbcType=INTEGER},
-      </if>
-      <if test="updateDate != null" >
-        update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateUser != null" >
-        update_user = #{updateUser,jdbcType=INTEGER},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="xyz.cincommon.model.BlogInfo" >
-    update blog_info
-    set uid = #{uid,jdbcType=INTEGER},
-      title = #{title,jdbcType=VARCHAR},
-      introduction = #{introduction,jdbcType=VARCHAR},
-      status = #{status,jdbcType=CHAR},
-      click_rates = #{clickRates,jdbcType=INTEGER},
-      reply_amount = #{replyAmount,jdbcType=INTEGER},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
-      create_user = #{createUser,jdbcType=INTEGER},
-      update_date = #{updateDate,jdbcType=TIMESTAMP},
-      update_user = #{updateUser,jdbcType=INTEGER},
-      content = #{content,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="xyz.cincommon.model.BlogInfo" >
-    update blog_info
-    set uid = #{uid,jdbcType=INTEGER},
-      title = #{title,jdbcType=VARCHAR},
-      introduction = #{introduction,jdbcType=VARCHAR},
-      status = #{status,jdbcType=CHAR},
-      click_rates = #{clickRates,jdbcType=INTEGER},
-      reply_amount = #{replyAmount,jdbcType=INTEGER},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
-      create_user = #{createUser,jdbcType=INTEGER},
-      update_date = #{updateDate,jdbcType=TIMESTAMP},
-      update_user = #{updateUser,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <select id="countBlog" resultType="java.lang.Integer">
-		SELECT COUNT(blog_info.id) FROM blog_info
+<mapper namespace="xyz.cincommon.mapper.BlogInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="xyz.cincommon.model.BlogInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="uid" property="uid" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="introduction" property="introduction"
+			jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="click_rates" property="clickRates"
+			jdbcType="INTEGER" />
+		<result column="reply_amount" property="replyAmount"
+			jdbcType="INTEGER" />
+		<result column="create_date" property="createDate"
+			jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser"
+			jdbcType="INTEGER" />
+		<result column="update_date" property="updateDate"
+			jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="blogMap" type="xyz.cincommon.model.BlogInfo">
+		<id property="id" column="id" />
+		<result property="uid" column="uid" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="introduction" column="introduction" />
+		<result property="status" column="status" />
+		<result property="clickRates" column="click_rates" />
+		<result property="replyAmount" column="reply_amount" />
+		<result property="createUser" column="create_user" />
+		<result property="createDate" column="create_date" />
+		<result property="updateDate" column="update_date" />
+		<result property="updateUser" column="update_user" />
+		<association property="forumInfo"
+			javaType="xyz.cincommon.model.ForumInfo" />
+		<collection property="tagInfoSet"
+			ofType="xyz.cincommon.model.TagInfo">
+			<id property="tagId" column="tag_id" />
+			<result property="tagName" column="tag_name" />
+		</collection>
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs"
+		type="xyz.cincommon.model.BlogInfo" extends="BaseResultMap">
+		<result column="content" property="content"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, uid, title, introduction, status, click_rates, reply_amount,
+		create_date, create_user,
+		update_date, update_user
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from blog_info
+		where id = #{id,jdbcType=INTEGER}
 	</select>
-  <select id="findTop10BlogInfo" resultMap="blogMap">
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from blog_info
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="xyz.cincommon.model.BlogInfo">
+		insert into blog_info (id, uid, title,
+		introduction, status, click_rates,
+		reply_amount, create_date, create_user,
+		update_date, update_user, content
+		)
+		values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER},
+		#{title,jdbcType=VARCHAR},
+		#{introduction,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{clickRates,jdbcType=INTEGER},
+		#{replyAmount,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP},
+		#{createUser,jdbcType=INTEGER},
+		#{updateDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="xyz.cincommon.model.BlogInfo">
+		insert into blog_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="introduction != null">
+				introduction,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="clickRates != null">
+				click_rates,
+			</if>
+			<if test="replyAmount != null">
+				reply_amount,
+			</if>
+			<if test="createDate != null">
+				create_date,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="updateDate != null">
+				update_date,
+			</if>
+			<if test="updateUser != null">
+				update_user,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="introduction != null">
+				#{introduction,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=CHAR},
+			</if>
+			<if test="clickRates != null">
+				#{clickRates,jdbcType=INTEGER},
+			</if>
+			<if test="replyAmount != null">
+				#{replyAmount,jdbcType=INTEGER},
+			</if>
+			<if test="createDate != null">
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=INTEGER},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser,jdbcType=INTEGER},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="xyz.cincommon.model.BlogInfo">
+		update blog_info
+		<set>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="introduction != null">
+				introduction = #{introduction,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=CHAR},
+			</if>
+			<if test="clickRates != null">
+				click_rates = #{clickRates,jdbcType=INTEGER},
+			</if>
+			<if test="replyAmount != null">
+				reply_amount = #{replyAmount,jdbcType=INTEGER},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null">
+				create_user = #{createUser,jdbcType=INTEGER},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null">
+				update_user = #{updateUser,jdbcType=INTEGER},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs"
+		parameterType="xyz.cincommon.model.BlogInfo">
+		update blog_info
+		set uid = #{uid,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
+		introduction = #{introduction,jdbcType=VARCHAR},
+		status = #{status,jdbcType=CHAR},
+		click_rates = #{clickRates,jdbcType=INTEGER},
+		reply_amount = #{replyAmount,jdbcType=INTEGER},
+		create_date = #{createDate,jdbcType=TIMESTAMP},
+		create_user = #{createUser,jdbcType=INTEGER},
+		update_date = #{updateDate,jdbcType=TIMESTAMP},
+		update_user = #{updateUser,jdbcType=INTEGER},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="xyz.cincommon.model.BlogInfo">
+		update blog_info
+		set uid = #{uid,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
+		introduction = #{introduction,jdbcType=VARCHAR},
+		status = #{status,jdbcType=CHAR},
+		click_rates = #{clickRates,jdbcType=INTEGER},
+		reply_amount = #{replyAmount,jdbcType=INTEGER},
+		create_date = #{createDate,jdbcType=TIMESTAMP},
+		create_user = #{createUser,jdbcType=INTEGER},
+		update_date = #{updateDate,jdbcType=TIMESTAMP},
+		update_user = #{updateUser,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="countBlog" resultType="java.lang.Integer">
+		SELECT COUNT(blog_info.id)
+		FROM blog_info
+	</select>
+	<select id="findTop10BlogInfo" resultMap="blogMap">
 		SELECT
 		res.id,
 		res.uid,
@@ -232,20 +252,23 @@
 		res.create_date,
 		ti.tag_id,
 		ti.tag_name FROM (SELECT * FROM blog_info AS bi
-		ORDER BY create_date DESC
+		ORDER BY create_date
+		DESC
 		LIMIT #{start},
 		#{offset}) AS res
 		INNER JOIN
-		blog_tag AS bt ON bt.blog_id =
+		blog_tag AS bt ON
+		bt.blog_id =
 		res.id
 		INNER
 		JOIN tag_info AS ti
 		ON
 		ti.tag_id =
 		bt.tag_id
-		ORDER BY res.create_date DESC
+		ORDER
+		BY res.create_date DESC
 	</select>
-  <select id="findByIdWithPrePost" resultMap="blogMap">
+	<select id="findByIdWithPrePost" resultMap="blogMap">
 		SELECT bi.*,
 		ti.tag_id AS
 		tag_id,
@@ -265,7 +288,7 @@
 		bi.id=(SELECT id FROM blog_info WHERE id
 		= #{id});
 	</select>
-  <select id="findById" resultMap="blogMap">
+	<select id="findById" resultMap="blogMap">
 		SELECT bi.*, ti.tag_id AS
 		tag_id,
 		ti.tag_name AS tag_name FROM blog_info bi
@@ -276,61 +299,61 @@
 		WHERE
 		bi.id=#{id};
 	</select>
-  <select id="findBlogByKeywordTagForum" resultMap="blogMap">
-    SELECT
-    bi.id,
-    bi.uid,
-    bi.title,
-    bi.introduction,
-    bi.status,
-    bi.click_rates,
-    bi.reply_amount,
-    bi.create_user,
-    bi.create_date,
-    ti.tag_id,
-    ti.tag_name
-    FROM
-    blog_info bi
-    LEFT JOIN blog_tag bt ON bi.id = bt.blog_id
-    LEFT JOIN
-    tag_info ti ON ti.tag_id = bt.tag_id
-    WHERE 1=1
-    <if test="keyword != null and keyword != ''">
-      AND bi.title LIKE CONCAT('%',#{keyword},'%')
-    </if>
-    <if
-            test="tagIdArray != null and tagIdArray != '' and tagIdArray.length != 0">
-      AND ti.tag_id IN
-      <foreach collection="tagIdArray" item="id" index="index"
-               open="(" close=")" separator=",">
-        #{id}
-      </foreach>
-    </if>
-  </select>
-  <select id="findBlog" resultMap="blogMap">
-    SELECT a.*, b.tag_id, b.tag_name
-    FROM blog_info as a LEFT JOIN blog_tag
-    as bi
-    ON a.id = bi.blog_id LEFT
-    JOIN tag_info as b ON b.tag_id =
-    bi.tag_id
-    WHERE 1=1
-    <if test="uid != null">
-      AND a.uid = #{uid}
-    </if>
-    <if test="startDate != null and endDate != null">
-      AND
-      date_format(a.create_date ,'%Y-%m-%d') &gt;=
-      DATE_FORMAT(#{startDate},'%Y-%m-%d')
-      AND date_format(a.create_date
-      ,'%Y-%m-%d') &lt;= DATE_FORMAT(#{endDate},'%Y-%m-%d')
-    </if>
-    <if test="startDate != null and endDate == null">
-      AND DATE_FORMAT(a.create_date ,'%Y-%m-%d') =
-      DATE_FORMAT(#{startDate},'%Y-%m-%d')
-    </if>
-  </select>
-  <select id="findOneYearBlogCount" resultType="java.util.HashMap">
+	<select id="findBlogByKeywordTagForum" resultMap="blogMap">
+		SELECT
+		bi.id,
+		bi.uid,
+		bi.title,
+		bi.introduction,
+		bi.status,
+		bi.click_rates,
+		bi.reply_amount,
+		bi.create_user,
+		bi.create_date,
+		ti.tag_id,
+		ti.tag_name
+		FROM
+		(SELECT * FROM blog_info LIMIT #{start}, #{offset}) bi
+		LEFT JOIN blog_tag bt ON bi.id = bt.blog_id
+		LEFT JOIN
+		tag_info ti ON ti.tag_id = bt.tag_id
+		WHERE 1=1
+		<if test="keyword != null and keyword != ''">
+			AND bi.title LIKE CONCAT('%',#{keyword},'%')
+		</if>
+		<if
+			test="tagIdArray != null and tagIdArray != '' and tagIdArray.length != 0">
+			AND ti.tag_id IN
+			<foreach collection="tagIdArray" item="id" index="index"
+				open="(" close=")" separator=",">
+				#{id}
+			</foreach>
+		</if>
+	</select>
+	<select id="findBlog" resultMap="blogMap">
+		SELECT a.*, b.tag_id, b.tag_name
+		FROM blog_info as a LEFT JOIN blog_tag
+		as bi
+		ON a.id = bi.blog_id LEFT
+		JOIN tag_info as b ON b.tag_id =
+		bi.tag_id
+		WHERE 1=1
+		<if test="uid != null">
+			AND a.uid = #{uid}
+		</if>
+		<if test="startDate != null and endDate != null">
+			AND
+			date_format(a.create_date ,'%Y-%m-%d') &gt;=
+			DATE_FORMAT(#{startDate},'%Y-%m-%d')
+			AND date_format(a.create_date
+			,'%Y-%m-%d') &lt;= DATE_FORMAT(#{endDate},'%Y-%m-%d')
+		</if>
+		<if test="startDate != null and endDate == null">
+			AND DATE_FORMAT(a.create_date ,'%Y-%m-%d') =
+			DATE_FORMAT(#{startDate},'%Y-%m-%d')
+		</if>
+	</select>
+	<select id="findOneYearBlogCount" resultType="java.util.HashMap">
 		SELECT
 		count(bi.id)
 		AS count,
@@ -342,7 +365,7 @@
 		GROUP BY
 		MONTH;
 	</select>
-  <insert id="insertBlog" useGeneratedKeys="true" keyProperty="id">
+	<insert id="insertBlog" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO blog_info(uid, title, content,
 		introduction, status,
 		click_rates, reply_amount, create_date,
@@ -362,9 +385,9 @@
 		#{update_user}
 		);
 	</insert>
-  <update id="updateBlog"
-          parameterType="xyz.cincommon.model.BlogInfo" flushCache="true"
-          statementType="PREPARED" timeout="20">
+	<update id="updateBlog"
+		parameterType="xyz.cincommon.model.BlogInfo" flushCache="true"
+		statementType="PREPARED" timeout="20">
 		UPDATE blog_info SET
 		uid = #{uid},
 		title = #{title},

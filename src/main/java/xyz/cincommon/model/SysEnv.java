@@ -1,7 +1,14 @@
 package xyz.cincommon.model;
 
-public class SysEnv {
-    private String envName;
+import java.io.Serializable;
+
+public class SysEnv implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8844182196471447816L;
+
+	private String envName;
 
     private String envValue;
 

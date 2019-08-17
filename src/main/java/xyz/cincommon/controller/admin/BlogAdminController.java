@@ -52,9 +52,9 @@ public class BlogAdminController {
 
     @GetMapping("/getBlogById")
     @ResponseBody
-    public ReturnResult<Map<String, Object>> getBlogById(HttpSession session, int id) {
+    public ReturnResult<Map<String, Object>> getBlogById(HttpSession session, String id) {
 		userService.checkCurrentUserRole(session, Constant.Role.ADMIN, Constant.Role.BLOGGER);
-        return null;
+        return blogService.findBlogById(id);
     }
 
     /**

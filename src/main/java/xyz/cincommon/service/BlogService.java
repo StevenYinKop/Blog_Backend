@@ -13,6 +13,8 @@ public interface BlogService {
 	
 	ReturnResult<Map<String, Object>> findBlogById(String id);
 
+	ReturnResult<Map<String, Object>> findBlogByIdWithPreAndPost(String id);
+
 	ReturnResult<Map<String, List<BlogInfo>>> findBlog(String uid, Date startDate, Date endDate);
 
 	ReturnResult<List<BlogInfo>> getOneDayBlog(Date date);

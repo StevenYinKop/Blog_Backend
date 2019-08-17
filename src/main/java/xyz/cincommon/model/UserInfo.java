@@ -1,11 +1,17 @@
 package xyz.cincommon.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
 @Data
-public class UserInfo {
-    private Integer uid;
+public class UserInfo implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7739236975122803723L;
+
+	private Integer uid;
 
     private String userName;
 

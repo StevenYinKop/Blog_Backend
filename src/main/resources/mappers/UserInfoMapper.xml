@@ -186,4 +186,5 @@
       update_user = #{updateUser,jdbcType=INTEGER}
     where uid = #{uid,jdbcType=INTEGER}
   </update>
+  <cache/>
 </mapper>

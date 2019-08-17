@@ -8,22 +8,26 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import xyz.cincommon.exception.BlogException;
 import xyz.cincommon.mapper.BlogInfoMapper;
 import xyz.cincommon.mapper.ForumInfoMapper;
 import xyz.cincommon.mapper.TagInfoMapper;
+import xyz.cincommon.mapper.UserInfoMapper;
 import xyz.cincommon.model.BlogInfo;
 import xyz.cincommon.model.User;
+import xyz.cincommon.model.UserInfo;
 import xyz.cincommon.service.BlogService;
 import xyz.cincommon.utils.Constant;
 import xyz.cincommon.utils.UserUtil;
+import xyz.cincommon.vo.BlogTableVo;
 import xyz.cincommon.vo.CodeMsg;
 import xyz.cincommon.vo.ReturnResult;
 
@@ -35,6 +39,10 @@ public class BlogServiceImpl implements BlogService {
 	private TagInfoMapper tagInfoMapper;
 	@Autowired
 	private ForumInfoMapper forumInfoMapper;
+	@Autowired
+	private UserInfoMapper userInfoMapper;
+	
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	@Override
 	public ReturnResult<Map<String, Object>> initMain(int pageSize, int pageNum) {
@@ -47,6 +55,14 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public ReturnResult<Map<String, Object>> findBlogById(String id) {
+		BlogInfo blogInfo = blogInfoMapper.findById(id);
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("blogInfo", blogInfo);
+		return ReturnResult.success(result);
+	}
+
+	@Override
+	public ReturnResult<Map<String, Object>> findBlogByIdWithPreAndPost(String id) {
 		// 查找当前Blog, 同时查出相邻的两篇博客用于预览
 		List<BlogInfo> blogInfoList = blogInfoMapper.findByIdWithPrePost(id);
 		BlogInfo currentBlog = null, prevBlog = null, postBlog = null;
@@ -75,7 +91,7 @@ public class BlogServiceImpl implements BlogService {
 		} else {
 			return ReturnResult.error(CodeMsg.NOT_FIND_DATA);
 		}
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = Maps.newHashMap();
 		result.put("currentBlog", currentBlog);
 		result.put("prevBlog", prevBlog);
 		result.put("postBlog", postBlog);
@@ -126,13 +142,27 @@ public class BlogServiceImpl implements BlogService {
 			int pageNum) {
 		Map<String, Object> map = new HashMap<>();
 		String[] tagIdArray = StringUtils.splitByWholeSeparator(tagIdList, ",");
-		PageHelper.startPage(pageNum, pageSize);
-		PageInfo<BlogInfo> pageInfo = new PageInfo<>(
-				blogInfoMapper.findBlogByKeywordTagForum(keyword, tagIdArray, forumId));
-		map.put("pageInfo", pageInfo);
+		List<BlogInfo> blogInfoList = blogInfoMapper.findBlogByKeywordTagForum(keyword, tagIdArray, forumId, (pageNum - 1) * pageSize, pageSize);
+		int total = blogInfoMapper.countBlog();
+		List<BlogTableVo> blogTableVoList = Lists.newLinkedList();
+		for (BlogInfo blogInfo : blogInfoList) {
+			blogTableVoList.add(convertBlogInfoToBlogTableVo(blogInfo));
+		}
+		map.put("list", blogTableVoList);
+		map.put("total", total);
 		return ReturnResult.success(map);
 	}
 
+	public BlogTableVo convertBlogInfoToBlogTableVo(BlogInfo blogInfo) {
+		BlogTableVo vo = new BlogTableVo();
+		BeanUtils.copyProperties(blogInfo, vo);
+		UserInfo authorInfo = userInfoMapper.selectByPrimaryKey(vo.getUid());
+		vo.setAuthor(authorInfo.getUserName());
+		vo.setCreateDateStr(sdf.format(vo.getCreateDate()));
+		vo.setStatusName("已发布");
+		return vo;
+	}
+	
 	@Override
 	public ReturnResult<Map<String, Object>> saveBlogInfo(String blogId, String title, String content,
 			String introduction) throws BlogException {

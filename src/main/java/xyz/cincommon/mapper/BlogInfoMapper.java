@@ -24,7 +24,10 @@ public interface BlogInfoMapper {
     public List<Map<String, Object>> findOneYearBlogCount(@Param("year") int year);
 
     public List<BlogInfo> findBlogByKeywordTagForum(@Param("keyword") String keyword,
-                                                    @Param("tagIdArray") String[] tagIdArray, @Param("forumId") String forumId);
+                                                    @Param("tagIdArray") String[] tagIdArray, 
+                                                    @Param("forumId") String forumId,
+                                                    @Param("start") Integer start,
+                                                    @Param("offset") Integer offset);
 
     public void insertBlog(BlogInfo blogInfo);
 

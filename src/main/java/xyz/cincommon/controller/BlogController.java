@@ -22,7 +22,7 @@ public class BlogController{
     private BlogService blogService;
     @GetMapping("/get/blog/{id}")
     public ReturnResult<Map<String, Object>> getBlog(@PathVariable("id") String id) {
-        return blogService.findBlogById(id);
+        return blogService.findBlogByIdWithPreAndPost(id);
     }
 
 
