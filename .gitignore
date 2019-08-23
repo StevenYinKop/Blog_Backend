@@ -50,3 +50,4 @@ hs_err_pid*
 ### mybatis-generator ###
 /generator/
 /logs
+/.apt_generated_tests/

@@ -11,26 +11,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
 
-import xyz.cincommon.model.TagInfo;
-import xyz.cincommon.service.TagService;
+import xyz.cincommon.model.ForumInfo;
+import xyz.cincommon.service.ForumService;
 import xyz.cincommon.service.UserService;
 import xyz.cincommon.utils.Constant;
 import xyz.cincommon.vo.ReturnResult;
 
-@RequestMapping("/admin")
+@RequestMapping("admin")
 @RestController
-public class TagAdminController {
+public class ForumAdminContoller {
     @Autowired
-    private TagService tagService;
+    private ForumService forumService;
     @Autowired
     private UserService userService;
-    @GetMapping("/getTagList")
+    
+    @GetMapping("/getForumList")
     @ResponseBody
-    public ReturnResult<PageInfo<TagInfo>> getTagList(
+    public ReturnResult<PageInfo<ForumInfo>> getTagList(
             @RequestParam(value = "pageSize", required = false) Integer pageSize,
             @RequestParam(value = "pageNum", required = false) Integer pageNum,
             HttpServletRequest request) {
 		userService.checkCurrentUserRole(request.getSession(), Constant.Role.ADMIN, Constant.Role.BLOGGER);
-        return tagService.getTag(pageSize, pageNum);
+        return forumService.getForum(pageSize, pageNum);
     }
+
 }

@@ -15,13 +15,13 @@ public class CommonExceptionHandler {
 
 	@ExceptionHandler(BlogException.class)
 	public ReturnResult<String> exceptionHandle(BlogException e) {
-		LOGGER.error(e.getMessage());
+		LOGGER.error("BlogException: {}", e);
 		return ReturnResult.error(e.getCodeMsg());
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ReturnResult<String> exceptionHandle(Exception e) {
-		LOGGER.error(e.getMessage());
+		LOGGER.error("Exception: {}", e);
 		return ReturnResult.error(CodeMsg.SERVER_EXCEPTION, e.getMessage());
 	}
 }

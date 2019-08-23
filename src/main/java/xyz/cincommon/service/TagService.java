@@ -11,5 +11,5 @@ public interface TagService {
 
 	public ReturnResult<TagInfo> getTagById(String id) throws Exception;	
 	public ReturnResult<Collection<TagInfo>> getTag();	
-	public ReturnResult<PageInfo<TagInfo>> getTag(int pageNum, int pageSize);
+	public ReturnResult<PageInfo<TagInfo>> getTag(Integer pageNum, Integer pageSize);
 }

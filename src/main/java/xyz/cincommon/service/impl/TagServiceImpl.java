@@ -29,9 +29,12 @@ public class TagServiceImpl implements TagService {
 
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ReturnResult<PageInfo<TagInfo>> getTag(int pageNum, int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
-		PageInfo info = new PageInfo(tagInfoMapper.findAllTagInfo());
+	public ReturnResult<PageInfo<TagInfo>> getTag(Integer pageNum, Integer pageSize) {
+		PageInfo info;
+		if (null != pageNum && null != pageSize) {
+			PageHelper.startPage(pageNum, pageSize);
+		}
+		info = new PageInfo(tagInfoMapper.findAllTagInfo());
 		return ReturnResult.success(info);
 	}
 

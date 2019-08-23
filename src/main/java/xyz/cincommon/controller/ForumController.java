@@ -1,10 +1,10 @@
 package xyz.cincommon.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import com.github.pagehelper.PageInfo;
 
 import xyz.cincommon.model.ForumInfo;
 import xyz.cincommon.service.ForumService;
@@ -15,8 +15,8 @@ public class ForumController {
     private ForumService forumService;
 
     @GetMapping("/forum")
-    public ReturnResult<List<ForumInfo>> getForum() {
-        return forumService.getForum();
+    public ReturnResult<PageInfo<ForumInfo>> getForum() {
+        return forumService.getForum(null, null);
     }
 
     @GetMapping("/forum/{id}")
