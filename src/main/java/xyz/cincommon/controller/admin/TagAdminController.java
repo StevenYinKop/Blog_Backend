@@ -30,7 +30,7 @@ public class TagAdminController {
             @RequestParam(value = "pageSize", required = false) Integer pageSize,
             @RequestParam(value = "pageNum", required = false) Integer pageNum,
             HttpServletRequest request) {
-		userService.checkCurrentUserRole(request.getSession(), Constant.Role.ADMIN, Constant.Role.BLOGGER);
+		userService.checkCurrentUserRole(Constant.Role.ADMIN, Constant.Role.BLOGGER);
         return tagService.getTag(pageSize, pageNum);
     }
 }

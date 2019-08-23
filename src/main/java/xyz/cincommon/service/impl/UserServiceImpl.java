@@ -3,8 +3,6 @@ package xyz.cincommon.service.impl;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ReturnResult<String> logout() {
-//		UserUtil.getRequest().removeAttribute(Constant.CURRENT_USER);
 		return ReturnResult.success("Logout success");
 	}
 
@@ -57,7 +54,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void checkCurrentUserRole(HttpSession session, Constant.Role ... roles) {
+	public void checkCurrentUserRole(Constant.Role ... roles) {
 		User user = UserUtil.getUser();
 		Collection<Role> dbRole = queryRoleByUser(user);
 		boolean b = false;
