@@ -3,8 +3,6 @@ package xyz.cincommon.controller.admin;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +28,10 @@ public class CommonAdminController {
 	private UserService userService;
 
 	@GetMapping("/sysEnv")
-	public ReturnResult<Map<String, Object>> sysEnv(@RequestParam(required = false, name = "keys") String keys,
-			HttpSession session) {
-		userService.checkCurrentUserRole(session, Constant.Role.ADMIN, Constant.Role.BLOGGER);
+	public ReturnResult<Map<String, Object>> sysEnv(
+				@RequestParam(required = false, name = "keys") String keys
+			) {
+		userService.checkCurrentUserRole(Constant.Role.ADMIN, Constant.Role.BLOGGER);
 		if (StringUtils.isEmpty(keys)) {
 			return ReturnResult.error(CodeMsg.PARAMETER_ISNULL);
 		}
