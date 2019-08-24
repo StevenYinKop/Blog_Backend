@@ -1,6 +1,7 @@
 package xyz.cincommon.service;
 
 import java.util.Collection;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,5 +21,7 @@ public interface UserService {
 	void checkCurrentUserRole(HttpSession session, Constant.Role ... roles);
 
 	ReturnResult<String> verifyLogin();
+
+	ReturnResult<Map<String, Object>> initDashboard(User user) throws Exception;
 
 }
