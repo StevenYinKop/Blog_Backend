@@ -159,6 +159,7 @@ public class BlogServiceImpl implements BlogService {
 		UserInfo authorInfo = userInfoMapper.selectByPrimaryKey(vo.getUid());
 		vo.setAuthor(authorInfo.getUserName());
 		vo.setCreateDateStr(sdf.format(vo.getCreateDate()));
+		// TODO, 需要根据status 动态变更当前的状态
 		vo.setStatusName("已发布");
 		return vo;
 	}
