@@ -49,7 +49,8 @@
 			jdbcType="LONGVARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, uid, title, introduction, status, click_rates, reply_amount,
+		id, uid, title, introduction, status, click_rates,
+		reply_amount,
 		create_date, create_user,
 		update_date, update_user
 	</sql>
@@ -71,17 +72,22 @@
 		where id = #{id,jdbcType=INTEGER}
 	</delete>
 	<insert id="insert" parameterType="xyz.cincommon.model.BlogInfo">
-		insert into blog_info (id, uid, title,
+		insert into blog_info (id,
+		uid, title,
 		introduction, status, click_rates,
-		reply_amount, create_date, create_user,
+		reply_amount,
+		create_date, create_user,
 		update_date, update_user, content
 		)
-		values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER},
+		values
+		(#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER},
 		#{title,jdbcType=VARCHAR},
-		#{introduction,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{clickRates,jdbcType=INTEGER},
+		#{introduction,jdbcType=VARCHAR},
+		#{status,jdbcType=CHAR}, #{clickRates,jdbcType=INTEGER},
 		#{replyAmount,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP},
 		#{createUser,jdbcType=INTEGER},
-		#{updateDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+		#{updateDate,jdbcType=TIMESTAMP},
+		#{updateUser,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
 		)
 	</insert>
 	<insert id="insertSelective"
@@ -208,31 +214,46 @@
 		parameterType="xyz.cincommon.model.BlogInfo">
 		update blog_info
 		set uid = #{uid,jdbcType=INTEGER},
-		title = #{title,jdbcType=VARCHAR},
-		introduction = #{introduction,jdbcType=VARCHAR},
+		title
+		= #{title,jdbcType=VARCHAR},
+		introduction =
+		#{introduction,jdbcType=VARCHAR},
 		status = #{status,jdbcType=CHAR},
 		click_rates = #{clickRates,jdbcType=INTEGER},
-		reply_amount = #{replyAmount,jdbcType=INTEGER},
-		create_date = #{createDate,jdbcType=TIMESTAMP},
-		create_user = #{createUser,jdbcType=INTEGER},
-		update_date = #{updateDate,jdbcType=TIMESTAMP},
-		update_user = #{updateUser,jdbcType=INTEGER},
-		content = #{content,jdbcType=LONGVARCHAR}
+		reply_amount =
+		#{replyAmount,jdbcType=INTEGER},
+		create_date =
+		#{createDate,jdbcType=TIMESTAMP},
+		create_user =
+		#{createUser,jdbcType=INTEGER},
+		update_date =
+		#{updateDate,jdbcType=TIMESTAMP},
+		update_user =
+		#{updateUser,jdbcType=INTEGER},
+		content =
+		#{content,jdbcType=LONGVARCHAR}
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 	<update id="updateByPrimaryKey"
 		parameterType="xyz.cincommon.model.BlogInfo">
 		update blog_info
 		set uid = #{uid,jdbcType=INTEGER},
-		title = #{title,jdbcType=VARCHAR},
-		introduction = #{introduction,jdbcType=VARCHAR},
+		title
+		= #{title,jdbcType=VARCHAR},
+		introduction =
+		#{introduction,jdbcType=VARCHAR},
 		status = #{status,jdbcType=CHAR},
 		click_rates = #{clickRates,jdbcType=INTEGER},
-		reply_amount = #{replyAmount,jdbcType=INTEGER},
-		create_date = #{createDate,jdbcType=TIMESTAMP},
-		create_user = #{createUser,jdbcType=INTEGER},
-		update_date = #{updateDate,jdbcType=TIMESTAMP},
-		update_user = #{updateUser,jdbcType=INTEGER}
+		reply_amount =
+		#{replyAmount,jdbcType=INTEGER},
+		create_date =
+		#{createDate,jdbcType=TIMESTAMP},
+		create_user =
+		#{createUser,jdbcType=INTEGER},
+		update_date =
+		#{updateDate,jdbcType=TIMESTAMP},
+		update_user =
+		#{updateUser,jdbcType=INTEGER}
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 	<select id="countBlog" resultType="java.lang.Integer">
@@ -314,9 +335,11 @@
 		ti.tag_name
 		FROM
 		(SELECT * FROM blog_info LIMIT #{start}, #{offset}) bi
-		LEFT JOIN blog_tag bt ON bi.id = bt.blog_id
 		LEFT JOIN
-		tag_info ti ON ti.tag_id = bt.tag_id
+		blog_tag bt ON bi.id = bt.blog_id
+		LEFT JOIN
+		tag_info ti ON ti.tag_id =
+		bt.tag_id
 		WHERE 1=1
 		<if test="keyword != null and keyword != ''">
 			AND bi.title LIKE CONCAT('%',#{keyword},'%')
@@ -405,5 +428,16 @@
 		status = #{status}
 		WHERE id = #{id}
 	</update>
+	<select id="selectBlogInfoByUserId" parameterType="java.lang.Integer"
+		resultType="map">
+		SELECT
+		count(a.id) AS blog_amount,
+		SUM(a.reply_amount) AS reply_amount,
+		SUM(a.click_rates) AS click_amount
+		FROM
+		blog_info AS a
+		WHERE
+		a.uid = #{id};
+	</select>
 
 </mapper>

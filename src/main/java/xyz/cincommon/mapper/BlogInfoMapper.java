@@ -46,4 +46,6 @@ public interface BlogInfoMapper {
     int updateByPrimaryKeyWithBLOBs(BlogInfo record);
 
     int updateByPrimaryKey(BlogInfo record);
+    
+    List<Map<String, Integer>> selectBlogInfoByUserId(Integer uid);
 }

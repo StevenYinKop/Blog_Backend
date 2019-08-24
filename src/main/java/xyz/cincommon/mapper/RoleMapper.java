@@ -1,5 +1,7 @@
 package xyz.cincommon.mapper;
 
+import java.util.List;
+
 import xyz.cincommon.model.Role;
 
 public interface RoleMapper {
@@ -14,4 +16,6 @@ public interface RoleMapper {
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
+
+	List<String> selectRoleNameByUserId(Integer uid);
 }
