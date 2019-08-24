@@ -16,6 +16,7 @@ import xyz.cincommon.model.User;
 import xyz.cincommon.service.SysEnvService;
 import xyz.cincommon.service.UserService;
 import xyz.cincommon.utils.Constant;
+import xyz.cincommon.utils.UserUtil;
 import xyz.cincommon.vo.CodeMsg;
 import xyz.cincommon.vo.ReturnResult;
 
@@ -40,11 +41,9 @@ public class CommonAdminController {
 	}
 
 	@GetMapping("/initDashboard")
-	public ReturnResult<Map<String, Object>> initDashboard(HttpSession session) throws Exception {
-		User user = (User) session.getAttribute("CUR_USER");
-		if (user == null) {
-			return ReturnResult.error(CodeMsg.LOGIN_EXPIRED);
-		}
+	public ReturnResult<Map<String, Object>> initDashboard() throws Exception {
+		userService.verifyLogin();
+		User user = UserUtil.getUser();
 		return userService.initDashboard(user);
 	}
 
