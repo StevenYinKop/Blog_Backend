@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
 
+import xyz.cincommon.model.User;
 import xyz.cincommon.service.SysEnvService;
 import xyz.cincommon.service.UserService;
 import xyz.cincommon.utils.Constant;
@@ -25,6 +26,7 @@ public class CommonAdminController {
 	private SysEnvService sysEnvService;
 	@Autowired
 	private UserService userService;
+
 	@GetMapping("/sysEnv")
 	public ReturnResult<Map<String, Object>> sysEnv(
 				@RequestParam(required = false, name = "keys") String keys
@@ -36,4 +38,14 @@ public class CommonAdminController {
 		List<String> keyList = Lists.newArrayList(StringUtils.split(keys, ","));
 		return sysEnvService.getSysEnvByKey(keyList);
 	}
+
+	@GetMapping("/initDashboard")
+	public ReturnResult<Map<String, Object>> initDashboard(HttpSession session) throws Exception {
+		User user = (User) session.getAttribute("CUR_USER");
+		if (user == null) {
+			return ReturnResult.error(CodeMsg.LOGIN_EXPIRED);
+		}
+		return userService.initDashboard(user);
+	}
+
 }

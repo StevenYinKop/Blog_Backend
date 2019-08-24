@@ -1,6 +1,7 @@
 package xyz.cincommon.service;
 
 import java.util.Collection;
+import java.util.Map;
 
 import xyz.cincommon.model.Role;
 import xyz.cincommon.model.User;
@@ -33,5 +34,7 @@ public interface UserService {
 	 */
 	void checkCurrentUserRole(xyz.cincommon.utils.Constant.Role ... roles);
 	ReturnResult<String> verifyLogin();
+
+	ReturnResult<Map<String, Object>> initDashboard(User user) throws Exception;
 
 }
