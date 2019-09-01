@@ -73,8 +73,8 @@ public class BlogAdminController {
                                                           String tagIdList, @RequestParam(required = false) String forumId) throws BlogException {
     	userService.checkCurrentUserRole(Constant.Role.ADMIN, Constant.Role.BLOGGER);
         if (StringUtils.isBlank(tagIdList)) {
-            throw new BlogException("没有选择Tag");
+            throw new BlogException("Tag is missing!");
         }
-        return blogService.saveBlogInfo(blogId, title, content, introduction);
+        return blogService.saveBlogInfo(blogId, title, content, introduction, tagIdList, forumId);
     }
 }
