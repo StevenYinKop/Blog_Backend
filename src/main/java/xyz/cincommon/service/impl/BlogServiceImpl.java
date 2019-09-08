@@ -165,12 +165,21 @@ public class BlogServiceImpl implements BlogService {
 	}
 	
 	@Override
+	public ReturnResult<Map<String, Object>> initBlogView() {
+		Map<String, Object> res = new HashMap<>();
+		res.put("tagList", tagInfoMapper.findAllTagInfo());
+		res.put("forumList", forumInfoMapper.selectAll());
+		return ReturnResult.success(res);
+	}
+
+	@Override
 	public ReturnResult<Map<String, Object>> saveBlogInfo(String blogId, String title, String content,
-			String introduction) throws BlogException {
+			String introduction, String tagIdList, String forumId) throws BlogException {
 		User user = UserUtil.getUser();
 		Integer uid = user.getUid();
 		BlogInfo blogInfo;
-		if (StringUtils.isEmpty(blogId)) {
+		// 如果没有传Id, 查询数据库, 找到相应的博客信息.
+		if (!StringUtils.isEmpty(blogId)) {
 			blogInfo = blogInfoMapper.findById(blogId);
 			if (ObjectUtils.isEmpty(blogInfo)) {
 				throw new BlogException(CodeMsg.NOT_FIND_BLOG);
@@ -198,13 +207,5 @@ public class BlogServiceImpl implements BlogService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("blogInfo", blogInfo);
 		return ReturnResult.success(map);
-	}
-
-	@Override
-	public ReturnResult<Map<String, Object>> initBlogView() {
-		Map<String, Object> res = new HashMap<>();
-		res.put("tagList", tagInfoMapper.findAllTagInfo());
-		res.put("forumList", forumInfoMapper.selectAll());
-		return ReturnResult.success(res);
 	}
 }

@@ -20,6 +20,9 @@ import xyz.cincommon.vo.ReturnResult;
 @RequestMapping("/admin/auth")
 @RestController
 public class UserAuthController {
+	
+	private static final int USER_SESSION_TIMEOUT = 60 * 60;
+	
 	@Autowired
 	private UserService userService;
 	@PostMapping("/login")
@@ -27,6 +30,7 @@ public class UserAuthController {
 		ReturnResult<User> result = userService.login(loginUserInfo);
 		if(result.isOk()) {
 			HttpSession session = request.getSession();
+			session.setMaxInactiveInterval(USER_SESSION_TIMEOUT);
 			session.setAttribute(Constant.CURRENT_USER, result.getData());
 		}
 		return result;

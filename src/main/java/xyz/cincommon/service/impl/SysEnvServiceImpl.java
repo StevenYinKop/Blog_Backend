@@ -24,5 +24,4 @@ public class SysEnvServiceImpl implements SysEnvService{
 		resultMap.put("envList", envList);
 		return ReturnResult.success(resultMap);
 	}
-
 }
