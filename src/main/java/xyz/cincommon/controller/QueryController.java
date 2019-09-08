@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.collect.Lists;
 
 import xyz.cincommon.service.BlogService;
+import xyz.cincommon.service.LandingPageService;
 import xyz.cincommon.service.SysEnvService;
 import xyz.cincommon.vo.CodeMsg;
 import xyz.cincommon.vo.ReturnResult;
@@ -24,6 +25,8 @@ public class QueryController {
 	private BlogService blogService;
 	@Autowired
 	private SysEnvService sysEnvService;
+	@Autowired
+	private LandingPageService landingPageSerivce;
 
 	@GetMapping("/initMain")
 	public ReturnResult<Map<String, Object>> initMain(
@@ -42,5 +45,10 @@ public class QueryController {
 		}
 		List<String> keyList = Lists.newArrayList(StringUtils.split(keys, ","));
 		return sysEnvService.getSysEnvByKey(keyList);
+	}
+	
+	@GetMapping("/initLandingPage")
+	public ReturnResult<Map<String, Object>> initLandingPage() {
+		return landingPageSerivce.initLandingPage();
 	}
 }

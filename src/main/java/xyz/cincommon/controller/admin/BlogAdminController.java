@@ -70,7 +70,7 @@ public class BlogAdminController {
     @ResponseBody
     public ReturnResult<Map<String, Object>> saveBlogInfo(@RequestParam(required = false) String blogId,
                                                           @RequestParam(required = false) String user, String title, String content, String introduction,
-                                                          String tagIdList, @RequestParam(required = false) String forumId) throws BlogException {
+                                                          String tagIdList, @RequestParam(required = false) String forumId) {
     	userService.checkCurrentUserRole(Constant.Role.ADMIN, Constant.Role.BLOGGER);
         if (StringUtils.isBlank(tagIdList)) {
             throw new BlogException("Tag is missing!");
