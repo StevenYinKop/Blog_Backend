@@ -50,7 +50,8 @@ public class BlogManagerByJavaApplication {
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title("CINCOMMON - BLOG - SWAGGER - UI❤️").description("")
 				.contact(new Contact("CinCommon", "https://github.com/CinCommon", "yinzifancn@gmail.com"))
-				.contact(new Contact("machengong", "https://github.com/Makermc", null)).version("1.0").build();
+				.version("1.0")
+				.build();
 	}
 
 }

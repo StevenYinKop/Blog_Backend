@@ -132,6 +132,7 @@ public class UserServiceImpl implements UserService {
             result.put("commentsNum", map.get("reply_amount"));
         }
         long betweenDate = (endDate.getTime() - startDate.getTime())/(1000*60*60*24);
+        result.put("userName", user.getUsername());
         result.put("roleName", roleName);
         result.put("days", betweenDate);
 		return ReturnResult.success(result);
